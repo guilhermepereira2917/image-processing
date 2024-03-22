@@ -1,16 +1,13 @@
 import FileToRgbImageConverter from "@/classes/FileToRgbImageConverter";
-import NegativeFilter from "@/classes/NegativeFilter";
+import { FilterFactory, FilterType } from "@/classes/FilterFactory";
+import FilterInterface from "@/classes/FilterInterface";
 import { RgbImage } from "@/classes/RgbImage";
 import RgbImageCanvasDrawer from "@/classes/RgbImageCanvasDrawer";
-import React, { useState } from "react";
+import React from "react";
 
 export default function Home() {
 
   let uploadedImage: RgbImage | null = null;
-
-  function drawFileOnCanvas(file: File, canvasId: string): void {
-
-  }
 
   function onImageChange(event: React.ChangeEvent<HTMLInputElement>): void {
     if (!event.target.files || !event.target.files[0]) {
@@ -33,10 +30,11 @@ export default function Home() {
       return;
     }
 
-    const negativeImage: RgbImage = new NegativeFilter().apply(uploadedImage);
+    const filter: FilterInterface = new FilterFactory().createFilter(FilterType.negativeFilter);
+    const convertedImage: RgbImage = filter.apply(uploadedImage);
     const canvas: HTMLCanvasElement = document.getElementById('convertedImageCanvas') as HTMLCanvasElement;
     const rgbImageCanvasDrawer: RgbImageCanvasDrawer = new RgbImageCanvasDrawer();
-    rgbImageCanvasDrawer.draw(negativeImage, canvas);
+    rgbImageCanvasDrawer.draw(convertedImage, canvas);
   }
 
   return (
