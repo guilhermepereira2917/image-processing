@@ -4,7 +4,7 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head />
-      <body>
+      <body className="flex justify-center items-center h-screen">
         <Main />
         <NextScript />
       </body>

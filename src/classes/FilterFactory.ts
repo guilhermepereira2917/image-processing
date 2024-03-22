@@ -1,11 +1,8 @@
 import FilterInterface from "./FilterInterface";
+import { FilterType } from "./FilterType";
 import NegativeFilter from "./NegativeFilter";
 
-export enum FilterType {
-  negativeFilter
-}
-
-export class FilterFactory {
+export const FilterFactory = {
   createFilter(filterType: FilterType): FilterInterface {
     switch (filterType) {
       case FilterType.negativeFilter:
