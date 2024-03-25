@@ -1,5 +1,5 @@
-import FilterInterface from "./FilterInterface";
-import { RgbImage, RgbPixel } from "./RgbImage";
+import FilterInterface from "../FilterInterface";
+import { RgbImage, RgbPixel } from "../RgbImage";
 
 export default class NegativeFilter implements FilterInterface {
   apply(image: RgbImage) {

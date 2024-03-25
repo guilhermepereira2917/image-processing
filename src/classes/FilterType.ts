@@ -1,7 +1,9 @@
 export enum FilterType {
-  negativeFilter
+  negativeFilter,
+  brightnessFilter,
 }
 
 export const FilterTypeLabel = new Map<number, string>([
-  [FilterType.negativeFilter, 'Negative']
+  [FilterType.negativeFilter, 'Negative'],
+  [FilterType.brightnessFilter, 'Brightness'],
 ]);

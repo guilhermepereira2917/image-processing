@@ -31,12 +31,12 @@ export default function Home() {
     selectedFilterType = FilterType[event.target.value as keyof typeof FilterType];
   }
 
-  function onNegativeClick(): void {
+  function onApplyFilterClick(): void {
     if (!uploadedImage) {
       return;
     }
 
-    const filter: FilterInterface = FilterFactory.createFilter(FilterType.negativeFilter);
+    const filter: FilterInterface = FilterFactory.createFilter(selectedFilterType);
     const convertedImage: RgbImage = filter.apply(uploadedImage);
     const canvas: HTMLCanvasElement = document.getElementById('convertedImageCanvas') as HTMLCanvasElement;
     const rgbImageCanvasDrawer: RgbImageCanvasDrawer = new RgbImageCanvasDrawer();
@@ -48,7 +48,7 @@ export default function Home() {
     .filter((value: string): boolean => isNaN(Number(value)))
     .map((value: string, key: number) => {
       return (
-        <option value={value}>{FilterTypeLabel.get(key)}</option>
+        <option key={value} value={value}>{FilterTypeLabel.get(key)}</option>
       )
     });
 
@@ -65,7 +65,7 @@ export default function Home() {
         <select name="filterType" id="filterType" onChange={onFilterTypeChange}>
           {filterTypes}
         </select>
-        <button onClick={onNegativeClick} className="bg-sky-800 p-2 rounded text-white font-bold">Apply Filter</button>
+        <button onClick={onApplyFilterClick} className="bg-sky-800 p-2 rounded text-white font-bold">Apply Filter</button>
       </div>
 
       <div className="outline outline-sky-500">
