@@ -1,7 +1,6 @@
-import FilterInterface from "../FilterInterface";
 import { RgbImage, RgbPixel } from "../RgbImage";
 
-export default class NegativeFilter implements FilterInterface {
+export default class NegativeFilter {
   apply(image: RgbImage) {
     const clonedImage: RgbImage = image.clone();
 
