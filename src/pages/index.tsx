@@ -4,6 +4,7 @@ import { RgbImage } from "@/classes/RgbImage";
 import RgbImageCanvasDrawer from "@/classes/RgbImageCanvasDrawer";
 import AddImageFilter from "@/classes/filters/AddImageFilter";
 import BrightnessFilter from "@/classes/filters/BrightnessFilter";
+import CropImageFilter from "@/classes/filters/CropImageFilter";
 import FlipLeftRightFilter from "@/classes/filters/FlipLeftRightFilter";
 import FlipTopDownFilter from "@/classes/filters/FlipTopDownFilter";
 import NegativeFilter from "@/classes/filters/NegativeFilter";
@@ -66,6 +67,15 @@ export default function Home() {
     rgbImageCanvasDrawer.draw(convertedImage, canvas);
   }
 
+  function onCropImageClick(): void {
+    return filterApplier.applyFilterToFirstImage((image: RgbImage) => {
+      const width: number = (document.getElementById('cropImageWidthInput') as HTMLInputElement).value as unknown as number;
+      const height: number = (document.getElementById('cropImageHeightInput') as HTMLInputElement).value as unknown as number;
+
+      return new CropImageFilter().crop(image, 0, 0, width, height);
+    });
+  }
+
   function onNegativeFilterClick(): void {
     filterApplier.applyFilterToFirstImage((image: RgbImage) => { return new NegativeFilter().apply(image) })
   }
@@ -122,11 +132,19 @@ export default function Home() {
       </div>
 
       <div className="w-96 flex flex-col gap-2 items-center justify-center">
+        <div className="flex flex-col">
+          <input type="number" id="cropImageWidthInput" placeholder="width" className="border w-36" />
+          <input type="number" id="cropImageHeightInput" placeholder="height" className="border w-36" />
+          <button onClick={onCropImageClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Crop Image</button>
+        </div>
+
         <button onClick={onNegativeFilterClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Negative</button>
+
         <div className="flex flex-col">
           <input id="brightnessValue" type="range" min="0" max="1000" defaultValue="100" step="10" />
           <button onClick={onBrightnessFilterClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Brightness</button>
         </div>
+
         <button onClick={onFlipLeftRightClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Flip Left-Right</button>
         <button onClick={onFlipTopDownClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Flip Top-Down</button>
         <button onClick={onAddImagesClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Add Images</button>

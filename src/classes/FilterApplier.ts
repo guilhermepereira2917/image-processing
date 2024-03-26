@@ -12,7 +12,7 @@ export default class FilterApplier {
       return;
     }
 
-    this.convertedImage = applyFilterFunction(this.firstUploadedImage.clone());
+    this.convertedImage = applyFilterFunction(this.firstUploadedImage.clone()).normalize();
 
     if (this.onFilterApply) {
       this.onFilterApply(this.convertedImage);
@@ -24,7 +24,7 @@ export default class FilterApplier {
       return;
     }
 
-    this.convertedImage = applyFilterFunction(this.firstUploadedImage.clone(), this.secondUploadedImage.clone());
+    this.convertedImage = applyFilterFunction(this.firstUploadedImage.clone(), this.secondUploadedImage.clone()).normalize();
 
     if (this.onFilterApply) {
       this.onFilterApply(this.convertedImage);

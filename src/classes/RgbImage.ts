@@ -14,6 +14,12 @@ export class RgbPixel {
   clone(): RgbPixel {
     return new RgbPixel(this.red, this.green, this.blue, this.alpha);
   }
+
+  normalize(): void {
+    this.red = Math.min(Math.max(this.red, 0), 255);
+    this.green = Math.min(Math.max(this.green, 0), 255);
+    this.blue = Math.min(Math.max(this.blue, 0), 255);
+  }
 }
 
 export class RgbImage {
@@ -30,10 +36,10 @@ export class RgbImage {
   height(): number {
     return this.pixels.length;
   }
-  
+
   clone(): RgbImage {
     const clonedPixels: RgbPixel[][] = [];
-    
+
     for (let y = 0; y < this.height(); y++) {
       const row: RgbPixel[] = [];
       for (let x = 0; x < this.width(); x++) {
@@ -44,5 +50,17 @@ export class RgbImage {
     }
 
     return new RgbImage(clonedPixels);
+  }
+
+  normalize(): RgbImage {
+    const normalizedImage = this.clone();
+
+    normalizedImage.pixels.forEach((row: RgbPixel[]) => {
+      row.forEach((pixel: RgbPixel) => {
+        pixel.normalize();
+      })
+    });
+
+    return normalizedImage;
   }
 }
