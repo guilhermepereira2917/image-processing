@@ -1,4 +1,5 @@
 import FileToRgbImageConverter from "@/classes/FileToRgbImageConverter";
+import FilterApplier from "@/classes/FilterApplier";
 import { FilterType, FilterTypeLabel } from "@/classes/FilterType";
 import { RgbImage } from "@/classes/RgbImage";
 import RgbImageCanvasDrawer from "@/classes/RgbImageCanvasDrawer";
@@ -10,7 +11,18 @@ import React from "react";
 
 export default function Home() {
 
-  let uploadedImage: RgbImage | null = null;
+  const filterApplier = new FilterApplier();
+  filterApplier.onFilterApply = (image: RgbImage) => {
+    drawConvertedImage(image);
+  }
+
+  function getUploadedImageCanvas(): HTMLCanvasElement {
+    return document.getElementById('uploadedImageCanvas') as HTMLCanvasElement;
+  }
+
+  function getConvertedImageCanvas(): HTMLCanvasElement {
+    return document.getElementById('convertedImageCanvas') as HTMLCanvasElement;
+  }
 
   function onImageChange(event: React.ChangeEvent<HTMLInputElement>): void {
     if (!event.target.files || !event.target.files[0]) {
@@ -20,55 +32,53 @@ export default function Home() {
     const uploadedFile: File = event.target.files[0];
     const fileToRgbImageConverter: FileToRgbImageConverter = new FileToRgbImageConverter();
     fileToRgbImageConverter.convert(uploadedFile).then((value: RgbImage) => {
-      uploadedImage = value;
+      filterApplier.uploadedImage = value;
 
-      const canvas: HTMLCanvasElement = document.getElementById('uploadedImageCanvas') as HTMLCanvasElement;
+      const canvas: HTMLCanvasElement = getUploadedImageCanvas();
       const rgbImageCanvasDrawer: RgbImageCanvasDrawer = new RgbImageCanvasDrawer();
-      rgbImageCanvasDrawer.draw(uploadedImage, canvas);
+      rgbImageCanvasDrawer.draw(filterApplier.uploadedImage, canvas);
     });
   }
 
   function drawConvertedImage(convertedImage: RgbImage) {
-    const canvas: HTMLCanvasElement = document.getElementById('convertedImageCanvas') as HTMLCanvasElement;
+    const canvas: HTMLCanvasElement = getConvertedImageCanvas();
     const rgbImageCanvasDrawer: RgbImageCanvasDrawer = new RgbImageCanvasDrawer();
     rgbImageCanvasDrawer.draw(convertedImage, canvas);
   }
 
   function onNegativeFilterClick(): void {
-    if (!uploadedImage) {
-      return;
-    }
-
-    const filter: NegativeFilter = new NegativeFilter();
-    drawConvertedImage(filter.apply(uploadedImage));
+    filterApplier.applyFilter((image: RgbImage) => { return new NegativeFilter().apply(image) })
   }
 
   function onBrightnessFilterClick(): void {
-    if (!uploadedImage) {
-      return;
-    }
-
-    const filter: BrightnessFilter = new BrightnessFilter();
-    const brightness: number = (document.getElementById('brightnessValue') as HTMLInputElement).value as unknown as number / 100;
-    drawConvertedImage(filter.apply(uploadedImage, brightness));
+    filterApplier.applyFilter((image: RgbImage) => {
+      const brightness: number = (document.getElementById('brightnessValue') as HTMLInputElement).value as unknown as number / 100;
+      return new BrightnessFilter().apply(image, brightness);
+    })
   }
 
   function onFlipLeftRightClick(): void {
-    if (!uploadedImage) {
-      return;
-    }
-
-    const filter: FlipLeftRightFilter = new FlipLeftRightFilter();
-    drawConvertedImage(filter.apply(uploadedImage));
+    filterApplier.applyFilter((image: RgbImage) => { return new FlipLeftRightFilter().apply(image) })
   }
 
   function onFlipTopDownClick(): void {
-    if (!uploadedImage) {
+    filterApplier.applyFilter((image: RgbImage) => { return new FlipTopDownFilter().apply(image) })
+  }
+
+  function onDownloadImageClick(): void {
+    if (!filterApplier.convertedImage) {
       return;
     }
 
-    const filter: FlipTopDownFilter = new FlipTopDownFilter();
-    drawConvertedImage(filter.apply(uploadedImage));
+    const dataUrl = getConvertedImageCanvas().toDataURL('image/png');
+
+    const link = document.createElement('a');
+    link.href = dataUrl;
+    link.download = 'converted_image.png';
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   }
 
   const filterTypes = Object
@@ -102,6 +112,8 @@ export default function Home() {
       <div className="outline outline-sky-500 p-2">
         <label>Converted image</label>
         <canvas className="mt-2 outline outline-sky-500" id="convertedImageCanvas" />
+
+        <button onClick={onDownloadImageClick} className="bg-sky-800 p-2 mt-2 rounded text-white font-bold w-full">Download Image</button>
       </div>
     </main>
   );
