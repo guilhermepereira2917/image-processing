@@ -4,6 +4,7 @@ import { RgbImage } from "@/classes/RgbImage";
 import RgbImageCanvasDrawer from "@/classes/RgbImageCanvasDrawer";
 import AddImageFilter from "@/classes/filters/AddImageFilter";
 import BrightnessFilter from "@/classes/filters/BrightnessFilter";
+import ConcatImageFilter from "@/classes/filters/ConcatImageFilter";
 import CropImageFilter from "@/classes/filters/CropImageFilter";
 import FlipLeftRightFilter from "@/classes/filters/FlipLeftRightFilter";
 import FlipTopDownFilter from "@/classes/filters/FlipTopDownFilter";
@@ -101,6 +102,12 @@ export default function Home() {
     });
   }
 
+  function onConcatImagesClick(): void {
+    filterApplier.applyFilterToBothImages((firstImage: RgbImage, secondImage: RgbImage) => {
+      return new ConcatImageFilter().concat(firstImage, secondImage);
+    });
+  }
+
   function onDownloadImageClick(): void {
     if (!filterApplier.convertedImage) {
       return;
@@ -148,6 +155,7 @@ export default function Home() {
         <button onClick={onFlipLeftRightClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Flip Left-Right</button>
         <button onClick={onFlipTopDownClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Flip Top-Down</button>
         <button onClick={onAddImagesClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Add Images</button>
+        <button onClick={onConcatImagesClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Concat Images</button>
       </div>
 
       <div className="outline outline-sky-500 p-2">
