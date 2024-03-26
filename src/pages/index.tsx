@@ -3,6 +3,8 @@ import { FilterType, FilterTypeLabel } from "@/classes/FilterType";
 import { RgbImage } from "@/classes/RgbImage";
 import RgbImageCanvasDrawer from "@/classes/RgbImageCanvasDrawer";
 import BrightnessFilter from "@/classes/filters/BrightnessFilter";
+import FlipLeftRightFilter from "@/classes/filters/FlipLeftRightFilter";
+import FlipTopDownFilter from "@/classes/filters/FlipTopDownFilter";
 import NegativeFilter from "@/classes/filters/NegativeFilter";
 import React from "react";
 
@@ -51,6 +53,24 @@ export default function Home() {
     drawConvertedImage(filter.apply(uploadedImage, brightness));
   }
 
+  function onFlipLeftRightClick(): void {
+    if (!uploadedImage) {
+      return;
+    }
+
+    const filter: FlipLeftRightFilter = new FlipLeftRightFilter();
+    drawConvertedImage(filter.apply(uploadedImage));
+  }
+
+  function onFlipTopDownClick(): void {
+    if (!uploadedImage) {
+      return;
+    }
+
+    const filter: FlipTopDownFilter = new FlipTopDownFilter();
+    drawConvertedImage(filter.apply(uploadedImage));
+  }
+
   const filterTypes = Object
     .keys(FilterType)
     .filter((value: string): boolean => isNaN(Number(value)))
@@ -70,11 +90,13 @@ export default function Home() {
       </div>
 
       <div className="w-96 flex flex-col gap-2 items-center justify-center">
-        <button onClick={onNegativeFilterClick} className="bg-sky-800 p-2 rounded text-white font-bold">Negative</button>
+        <button onClick={onNegativeFilterClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Negative</button>
         <div className="flex flex-col">
           <input id="brightnessValue" type="range" min="0" max="1000" defaultValue="100" step="10" />
-          <button onClick={onBrightnessFilterClick} className="bg-sky-800 p-2 rounded text-white font-bold">Brightness</button>
+          <button onClick={onBrightnessFilterClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Brightness</button>
         </div>
+        <button onClick={onFlipLeftRightClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Flip Left-Right</button>
+        <button onClick={onFlipTopDownClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Flip Top-Down</button>
       </div>
 
       <div className="outline outline-sky-500 p-2">
