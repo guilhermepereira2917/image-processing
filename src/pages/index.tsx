@@ -1,8 +1,8 @@
 import FileToRgbImageConverter from "@/classes/FileToRgbImageConverter";
 import FilterApplier from "@/classes/FilterApplier";
-import { FilterType, FilterTypeLabel } from "@/classes/FilterType";
 import { RgbImage } from "@/classes/RgbImage";
 import RgbImageCanvasDrawer from "@/classes/RgbImageCanvasDrawer";
+import AddImageFilter from "@/classes/filters/AddImageFilter";
 import BrightnessFilter from "@/classes/filters/BrightnessFilter";
 import FlipLeftRightFilter from "@/classes/filters/FlipLeftRightFilter";
 import FlipTopDownFilter from "@/classes/filters/FlipTopDownFilter";
@@ -16,15 +16,19 @@ export default function Home() {
     drawConvertedImage(image);
   }
 
-  function getUploadedImageCanvas(): HTMLCanvasElement {
-    return document.getElementById('uploadedImageCanvas') as HTMLCanvasElement;
+  function getFirstUploadedImageCanvas(): HTMLCanvasElement {
+    return document.getElementById('firstUploadedImageCanvas') as HTMLCanvasElement;
+  }
+
+  function getSecondUploadedImageCanvas(): HTMLCanvasElement {
+    return document.getElementById('secondUploadedImageCanvas') as HTMLCanvasElement;
   }
 
   function getConvertedImageCanvas(): HTMLCanvasElement {
     return document.getElementById('convertedImageCanvas') as HTMLCanvasElement;
   }
 
-  function onImageChange(event: React.ChangeEvent<HTMLInputElement>): void {
+  function onFirstImageChange(event: React.ChangeEvent<HTMLInputElement>): void {
     if (!event.target.files || !event.target.files[0]) {
       return;
     }
@@ -32,11 +36,27 @@ export default function Home() {
     const uploadedFile: File = event.target.files[0];
     const fileToRgbImageConverter: FileToRgbImageConverter = new FileToRgbImageConverter();
     fileToRgbImageConverter.convert(uploadedFile).then((value: RgbImage) => {
-      filterApplier.uploadedImage = value;
+      filterApplier.firstUploadedImage = value;
 
-      const canvas: HTMLCanvasElement = getUploadedImageCanvas();
+      const canvas: HTMLCanvasElement = getFirstUploadedImageCanvas();
       const rgbImageCanvasDrawer: RgbImageCanvasDrawer = new RgbImageCanvasDrawer();
-      rgbImageCanvasDrawer.draw(filterApplier.uploadedImage, canvas);
+      rgbImageCanvasDrawer.draw(filterApplier.firstUploadedImage, canvas);
+    });
+  }
+
+  function onSecondImageChange(event: React.ChangeEvent<HTMLInputElement>): void {
+    if (!event.target.files || !event.target.files[0]) {
+      return;
+    }
+
+    const uploadedFile: File = event.target.files[0];
+    const fileToRgbImageConverter: FileToRgbImageConverter = new FileToRgbImageConverter();
+    fileToRgbImageConverter.convert(uploadedFile).then((value: RgbImage) => {
+      filterApplier.secondUploadedImage = value;
+
+      const canvas: HTMLCanvasElement = getSecondUploadedImageCanvas();
+      const rgbImageCanvasDrawer: RgbImageCanvasDrawer = new RgbImageCanvasDrawer();
+      rgbImageCanvasDrawer.draw(filterApplier.secondUploadedImage, canvas);
     });
   }
 
@@ -47,22 +67,28 @@ export default function Home() {
   }
 
   function onNegativeFilterClick(): void {
-    filterApplier.applyFilter((image: RgbImage) => { return new NegativeFilter().apply(image) })
+    filterApplier.applyFilterToFirstImage((image: RgbImage) => { return new NegativeFilter().apply(image) })
   }
 
   function onBrightnessFilterClick(): void {
-    filterApplier.applyFilter((image: RgbImage) => {
+    filterApplier.applyFilterToFirstImage((image: RgbImage) => {
       const brightness: number = (document.getElementById('brightnessValue') as HTMLInputElement).value as unknown as number / 100;
       return new BrightnessFilter().apply(image, brightness);
     })
   }
 
   function onFlipLeftRightClick(): void {
-    filterApplier.applyFilter((image: RgbImage) => { return new FlipLeftRightFilter().apply(image) })
+    filterApplier.applyFilterToFirstImage((image: RgbImage) => { return new FlipLeftRightFilter().apply(image) });
   }
 
   function onFlipTopDownClick(): void {
-    filterApplier.applyFilter((image: RgbImage) => { return new FlipTopDownFilter().apply(image) })
+    filterApplier.applyFilterToFirstImage((image: RgbImage) => { return new FlipTopDownFilter().apply(image) });
+  }
+
+  function onAddImagesClick(): void {
+    filterApplier.applyFilterToBothImages((firstImage: RgbImage, secondImage: RgbImage) => {
+      return new AddImageFilter().apply(firstImage, secondImage);
+    });
   }
 
   function onDownloadImageClick(): void {
@@ -81,22 +107,18 @@ export default function Home() {
     document.body.removeChild(link);
   }
 
-  const filterTypes = Object
-    .keys(FilterType)
-    .filter((value: string): boolean => isNaN(Number(value)))
-    .map((value: string, key: number) => {
-      return (
-        <option key={value} value={value}>{FilterTypeLabel.get(key)}</option>
-      )
-    });
-
   return (
     <main className="flex flex-wrap justify-center items-center">
       <div className="flex flex-col justify-center outline p-2 outline-sky-500">
-        <label htmlFor="uploadedImage">Upload an image</label>
-        <input type="file" name="uploadedImage" accept="image/png, image/jpeg" onChange={onImageChange} />
+        <label htmlFor="firstUploadedImage">Upload an image</label>
+        <input type="file" name="firstUploadedImage" accept="image/png, image/jpeg" onChange={onFirstImageChange} />
 
-        <canvas className="mt-2 outline outline-sky-500" id="uploadedImageCanvas" />
+        <canvas className="mt-2 outline outline-sky-500" id="firstUploadedImageCanvas" />
+
+        <label htmlFor="secondUploadedImage">Upload another image</label>
+        <input type="file" name="secondUploadedImage" accept="image/png, image/jpeg" onChange={onSecondImageChange} />
+
+        <canvas className="mt-2 outline outline-sky-500" id="secondUploadedImageCanvas" />
       </div>
 
       <div className="w-96 flex flex-col gap-2 items-center justify-center">
@@ -107,6 +129,7 @@ export default function Home() {
         </div>
         <button onClick={onFlipLeftRightClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Flip Left-Right</button>
         <button onClick={onFlipTopDownClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Flip Top-Down</button>
+        <button onClick={onAddImagesClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Add Images</button>
       </div>
 
       <div className="outline outline-sky-500 p-2">

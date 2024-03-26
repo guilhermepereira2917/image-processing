@@ -2,9 +2,7 @@ import { RgbImage, RgbPixel } from "../RgbImage";
 
 export default class BrightnessFilter {
   apply(image: RgbImage, brightness: number): RgbImage {
-    const clonedImage: RgbImage = image.clone();
-
-    clonedImage.pixels.forEach((row: RgbPixel[]) => {
+    image.pixels.forEach((row: RgbPixel[]) => {
       row.forEach((pixel: RgbPixel) => {
         pixel.red = pixel.red * brightness;
         pixel.blue = pixel.blue * brightness;
@@ -12,6 +10,6 @@ export default class BrightnessFilter {
       });
     });
 
-    return clonedImage;
+    return image;
   }
 }
