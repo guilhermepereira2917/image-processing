@@ -30,6 +30,28 @@ export default function Home() {
     return document.getElementById('convertedImageCanvas') as HTMLCanvasElement;
   }
 
+  function drawFirstUploadedImage(): void {
+    const canvas: HTMLCanvasElement = getFirstUploadedImageCanvas();
+    const rgbImageCanvasDrawer: RgbImageCanvasDrawer = new RgbImageCanvasDrawer();
+    rgbImageCanvasDrawer.draw(filterApplier.firstUploadedImage, canvas);
+  }
+
+  function drawSecondUploadedImage(): void {
+    const canvas: HTMLCanvasElement = getSecondUploadedImageCanvas();
+    const rgbImageCanvasDrawer: RgbImageCanvasDrawer = new RgbImageCanvasDrawer();
+    rgbImageCanvasDrawer.draw(filterApplier.secondUploadedImage, canvas);
+  }
+
+  function setFirstUploadedImage(image: RgbImage | null) {
+    filterApplier.firstUploadedImage = image;
+    drawFirstUploadedImage();
+  }
+
+  function setSecondUploadedImage(image: RgbImage | null) {
+    filterApplier.secondUploadedImage = image;
+    drawSecondUploadedImage();
+  }
+
   function onFirstImageChange(event: React.ChangeEvent<HTMLInputElement>): void {
     if (!event.target.files || !event.target.files[0]) {
       return;
@@ -38,11 +60,7 @@ export default function Home() {
     const uploadedFile: File = event.target.files[0];
     const fileToRgbImageConverter: FileToRgbImageConverter = new FileToRgbImageConverter();
     fileToRgbImageConverter.convert(uploadedFile).then((value: RgbImage) => {
-      filterApplier.firstUploadedImage = value;
-
-      const canvas: HTMLCanvasElement = getFirstUploadedImageCanvas();
-      const rgbImageCanvasDrawer: RgbImageCanvasDrawer = new RgbImageCanvasDrawer();
-      rgbImageCanvasDrawer.draw(filterApplier.firstUploadedImage, canvas);
+      setFirstUploadedImage(value);
     });
   }
 
@@ -54,11 +72,7 @@ export default function Home() {
     const uploadedFile: File = event.target.files[0];
     const fileToRgbImageConverter: FileToRgbImageConverter = new FileToRgbImageConverter();
     fileToRgbImageConverter.convert(uploadedFile).then((value: RgbImage) => {
-      filterApplier.secondUploadedImage = value;
-
-      const canvas: HTMLCanvasElement = getSecondUploadedImageCanvas();
-      const rgbImageCanvasDrawer: RgbImageCanvasDrawer = new RgbImageCanvasDrawer();
-      rgbImageCanvasDrawer.draw(filterApplier.secondUploadedImage, canvas);
+      setSecondUploadedImage(value);
     });
   }
 
@@ -108,6 +122,30 @@ export default function Home() {
     });
   }
 
+  function onClearFirstImageClick(): void {
+    setFirstUploadedImage(null);
+  }
+
+  function onClearSecondImageClick(): void {
+    setSecondUploadedImage(null);
+  }
+
+  function onSetAsFirstImageClick(): void {
+    if (!filterApplier.convertedImage) {
+      return;
+    }
+
+    setFirstUploadedImage(filterApplier.convertedImage.clone());
+  }
+
+  function onSetAsSecondImageClick(): void {
+    if (!filterApplier.convertedImage) {
+      return;
+    }
+
+    setSecondUploadedImage(filterApplier.convertedImage.clone());
+  }
+
   function onDownloadImageClick(): void {
     if (!filterApplier.convertedImage) {
       return;
@@ -127,15 +165,27 @@ export default function Home() {
   return (
     <main className="flex flex-wrap justify-center items-center">
       <div className="flex flex-col justify-center outline p-2 outline-sky-500">
-        <label htmlFor="firstUploadedImage">Upload an image</label>
-        <input type="file" name="firstUploadedImage" accept="image/png, image/jpeg" onChange={onFirstImageChange} />
+        <div className="flex mt-2">
+          <div className="flex flex-col flex-wrap">
+            <label htmlFor="firstUploadedImage">Upload an image</label>
+            <input type="file" name="firstUploadedImage" accept="image/png, image/jpeg" onChange={onFirstImageChange} />
+          </div>
+
+          <button onClick={onClearFirstImageClick} className="bg-sky-800 p-2 rounded text-white font-bold w-24">Clear</button>
+        </div>
 
         <canvas className="mt-2 outline outline-sky-500" id="firstUploadedImageCanvas" />
 
-        <label htmlFor="secondUploadedImage">Upload another image</label>
-        <input type="file" name="secondUploadedImage" accept="image/png, image/jpeg" onChange={onSecondImageChange} />
+        <div className="flex mt-2">
+          <div className="flex flex-col flex-wrap">
+            <label htmlFor="secondUploadedImage">Upload another image</label>
+            <input type="file" name="secondUploadedImage" accept="image/png, image/jpeg" onChange={onSecondImageChange} />
+          </div>
 
-        <canvas className="mt-2 outline outline-sky-500" id="secondUploadedImageCanvas" />
+          <button onClick={onClearSecondImageClick} className="bg-sky-800 p-2 rounded text-white font-bold w-24">Clear</button>
+        </div>
+
+        <canvas className="mt-2 outline outline-sky-500 w-full" id="secondUploadedImageCanvas" />
       </div>
 
       <div className="w-96 flex flex-col gap-2 items-center justify-center">
@@ -160,8 +210,11 @@ export default function Home() {
 
       <div className="outline outline-sky-500 p-2">
         <label>Converted image</label>
-        <canvas className="mt-2 outline outline-sky-500" id="convertedImageCanvas" />
+        <canvas className="mt-2 outline outline-sky-500 w-full" id="convertedImageCanvas" />
 
+
+        <button onClick={onSetAsFirstImageClick} className="bg-sky-800 p-2 mt-2 rounded text-white font-bold w-full">Set as First Image</button>
+        <button onClick={onSetAsSecondImageClick} className="bg-sky-800 p-2 mt-2 rounded text-white font-bold w-full">Set as Second Image</button>
         <button onClick={onDownloadImageClick} className="bg-sky-800 p-2 mt-2 rounded text-white font-bold w-full">Download Image</button>
       </div>
     </main>

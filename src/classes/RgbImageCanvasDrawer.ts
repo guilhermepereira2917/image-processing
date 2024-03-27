@@ -1,13 +1,18 @@
 import { RgbImage } from "./RgbImage";
 
 export default class RgbImageCanvasDrawer {
-  draw(image: RgbImage, canvas: HTMLCanvasElement): void {
+  draw(image: RgbImage | null, canvas: HTMLCanvasElement): void {
     const context: CanvasRenderingContext2D | null = canvas.getContext('2d');
     if (!context) {
       return;
     }
 
     context.clearRect(0, 0, canvas.width, canvas.height);
+
+    if (!image) {
+      return;
+    }
+
     canvas.width = image.width();
     canvas.height = image.height();
 
