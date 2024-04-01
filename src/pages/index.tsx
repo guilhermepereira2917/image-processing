@@ -9,6 +9,7 @@ import CropImageFilter from "@/classes/filters/CropImageFilter";
 import FlipLeftRightFilter from "@/classes/filters/FlipLeftRightFilter";
 import FlipTopDownFilter from "@/classes/filters/FlipTopDownFilter";
 import NegativeFilter from "@/classes/filters/NegativeFilter";
+import TresholdFilter from "@/classes/filters/TresholdFilter";
 import React from "react";
 
 export default function Home() {
@@ -100,6 +101,13 @@ export default function Home() {
       const brightness: number = (document.getElementById('brightnessValue') as HTMLInputElement).value as unknown as number / 100;
       return new BrightnessFilter().apply(image, brightness);
     })
+  }
+
+  function onThresholdFilterClick(): void {
+    filterApplier.applyFilterToFirstImage((image: RgbImage) => {
+      const thresold: number = (document.getElementById('tresholdValue') as HTMLInputElement).value as unknown as number;
+      return new TresholdFilter().apply(image, thresold);
+    });
   }
 
   function onFlipLeftRightClick(): void {
@@ -200,6 +208,11 @@ export default function Home() {
         <div className="flex flex-col">
           <input id="brightnessValue" type="range" min="0" max="1000" defaultValue="100" step="10" />
           <button onClick={onBrightnessFilterClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Brightness</button>
+        </div>
+
+        <div className="flex flex-col">
+          <input id="tresholdValue" type="range" min="0" max="255" defaultValue="127" step="1" />
+          <button onClick={onThresholdFilterClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Treshold</button>
         </div>
 
         <button onClick={onFlipLeftRightClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Flip Left-Right</button>

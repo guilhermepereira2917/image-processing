@@ -4,11 +4,16 @@ export class RgbPixel {
   blue: number;
   alpha: number;
 
-  constructor(red: number, green: number, blue: number, alpha: number) {
+  constructor(red: number, green: number, blue: number, alpha?: number) {
     this.red = red;
     this.green = green;
     this.blue = blue;
-    this.alpha = alpha;
+
+    if (alpha) {
+      this.alpha = alpha;
+    } else {
+      this.alpha = 255;
+    }
   }
 
   clone(): RgbPixel {
