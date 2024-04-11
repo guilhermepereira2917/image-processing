@@ -172,8 +172,8 @@ export default function Home() {
 
   return (
     <main className="flex flex-wrap justify-center items-center">
-      <div className="flex flex-col justify-center outline p-2 outline-sky-500">
-        <div className="flex mt-2">
+      <div className="flex-1 flex flex-col justify-center outline p-2 outline-sky-500">
+        <div className="flex justify-between mt-2">
           <div className="flex flex-col flex-wrap">
             <label htmlFor="firstUploadedImage">Upload an image</label>
             <input type="file" name="firstUploadedImage" accept="image/png, image/jpeg" onChange={onFirstImageChange} />
@@ -184,7 +184,7 @@ export default function Home() {
 
         <canvas className="mt-2 outline outline-sky-500" id="firstUploadedImageCanvas" />
 
-        <div className="flex mt-2">
+        <div className="flex justify-between mt-2">
           <div className="flex flex-col flex-wrap">
             <label htmlFor="secondUploadedImage">Upload another image</label>
             <input type="file" name="secondUploadedImage" accept="image/png, image/jpeg" onChange={onSecondImageChange} />
@@ -196,7 +196,7 @@ export default function Home() {
         <canvas className="mt-2 outline outline-sky-500 w-full" id="secondUploadedImageCanvas" />
       </div>
 
-      <div className="w-96 flex flex-col gap-2 items-center justify-center">
+      <div className="flex-1 w-96 flex flex-col gap-2 items-center justify-center">
         <div className="flex flex-col">
           <input type="number" id="cropImageWidthInput" placeholder="width" className="border w-36" />
           <input type="number" id="cropImageHeightInput" placeholder="height" className="border w-36" />
@@ -221,7 +221,7 @@ export default function Home() {
         <button onClick={onConcatImagesClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Concat Images</button>
       </div>
 
-      <div className="outline outline-sky-500 p-2">
+      <div className="flex-1 outline outline-sky-500 p-2">
         <label>Converted image</label>
         <canvas className="mt-2 outline outline-sky-500 w-full" id="convertedImageCanvas" />
 
