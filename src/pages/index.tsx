@@ -10,7 +10,8 @@ import FlipLeftRightFilter from "@/classes/filters/FlipLeftRightFilter";
 import FlipTopDownFilter from "@/classes/filters/FlipTopDownFilter";
 import NegativeFilter from "@/classes/filters/NegativeFilter";
 import TresholdFilter from "@/classes/filters/TresholdFilter";
-import React from "react";
+import HistogramChart from "@/classes/histogram/HistogramChart";
+import React, { useRef } from "react";
 
 export default function Home() {
 
@@ -130,6 +131,11 @@ export default function Home() {
     });
   }
 
+  const histogramChartRef = useRef<HistogramChart>(null);
+  function onUpdateHistogramClick(): void {
+    histogramChartRef.current?.updateHistogram(filterApplier.firstUploadedImage);
+  }
+
   function onClearFirstImageClick(): void {
     setFirstUploadedImage(null);
   }
@@ -219,6 +225,10 @@ export default function Home() {
         <button onClick={onFlipTopDownClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Flip Top-Down</button>
         <button onClick={onAddImagesClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Add Images</button>
         <button onClick={onConcatImagesClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Concat Images</button>
+
+        <button onClick={onUpdateHistogramClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Update Histogram</button>
+
+        <HistogramChart ref={histogramChartRef} />
       </div>
 
       <div className="flex-1 outline outline-sky-500 p-2">
