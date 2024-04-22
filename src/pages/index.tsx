@@ -11,7 +11,7 @@ import FlipTopDownFilter from "@/classes/filters/FlipTopDownFilter";
 import NegativeFilter from "@/classes/filters/NegativeFilter";
 import TresholdFilter from "@/classes/filters/TresholdFilter";
 import HistogramChart from "@/classes/histogram/HistogramChart";
-import React, { useRef } from "react";
+import React, { RefObject, useRef } from "react";
 
 export default function Home() {
 
@@ -131,10 +131,27 @@ export default function Home() {
     });
   }
 
-  const histogramChartRef = useRef<HistogramChart>(null);
+  const histogramChartRef: RefObject<HistogramChart> = useRef<HistogramChart>(null);
   function onUpdateHistogramClick(): void {
     histogramChartRef.current?.updateHistogram(filterApplier.firstUploadedImage);
   }
+
+  const filtersTabRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
+  const histogramTabRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
+
+  function setFocusedTab(ref: RefObject<HTMLDivElement>): void {
+    if (filtersTabRef.current) {
+      filtersTabRef.current.classList.add("hidden");
+    }
+
+    if (histogramTabRef.current) {
+      histogramTabRef.current.classList.add("hidden");
+    }
+
+    if (ref.current) {
+      ref.current.classList.remove("hidden");
+    }
+  };
 
   function onClearFirstImageClick(): void {
     setFirstUploadedImage(null);
@@ -177,7 +194,7 @@ export default function Home() {
   }
 
   return (
-    <main className="flex flex-wrap justify-center items-center">
+    <main className="w-screen p-2 flex flex-wrap justify-center items-center">
       <div className="flex-1 flex flex-col justify-center outline p-2 outline-sky-500">
         <div className="flex justify-between mt-2">
           <div className="flex flex-col flex-wrap">
@@ -202,33 +219,42 @@ export default function Home() {
         <canvas className="mt-2 outline outline-sky-500 w-full" id="secondUploadedImageCanvas" />
       </div>
 
-      <div className="flex-1 w-96 flex flex-col gap-2 items-center justify-center">
-        <div className="flex flex-col">
-          <input type="number" id="cropImageWidthInput" placeholder="width" className="border w-36" />
-          <input type="number" id="cropImageHeightInput" placeholder="height" className="border w-36" />
-          <button onClick={onCropImageClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Crop Image</button>
+      <div className="flex-1 flex-grow p-2 flex flex-col gap-2 items-center justify-center">
+        <div className="flex gap-2">
+          <button onClick={() => setFocusedTab(filtersTabRef)} className="bg-slate-200 p-2">Filters</button>
+          <button onClick={() => setFocusedTab(histogramTabRef)} className="bg-slate-200 p-2">Histogram</button>
         </div>
 
-        <button onClick={onNegativeFilterClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Negative</button>
+        <div ref={filtersTabRef} className="flex flex-col gap-2">
+          <div className="flex flex-col">
+            <input type="number" id="cropImageWidthInput" placeholder="width" className="border w-36" />
+            <input type="number" id="cropImageHeightInput" placeholder="height" className="border w-36" />
+            <button onClick={onCropImageClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Crop Image</button>
+          </div>
 
-        <div className="flex flex-col">
-          <input id="brightnessValue" type="range" min="0" max="1000" defaultValue="100" step="10" />
-          <button onClick={onBrightnessFilterClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Brightness</button>
+          <button onClick={onNegativeFilterClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Negative</button>
+
+          <div className="flex flex-col">
+            <input id="brightnessValue" type="range" min="0" max="1000" defaultValue="100" step="10" />
+            <button onClick={onBrightnessFilterClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Brightness</button>
+          </div>
+
+          <div className="flex flex-col">
+            <input id="tresholdValue" type="range" min="0" max="255" defaultValue="127" step="1" />
+            <button onClick={onThresholdFilterClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Treshold</button>
+          </div>
+
+          <button onClick={onFlipLeftRightClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Flip Left-Right</button>
+          <button onClick={onFlipTopDownClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Flip Top-Down</button>
+          <button onClick={onAddImagesClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Add Images</button>
+          <button onClick={onConcatImagesClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Concat Images</button>
         </div>
 
-        <div className="flex flex-col">
-          <input id="tresholdValue" type="range" min="0" max="255" defaultValue="127" step="1" />
-          <button onClick={onThresholdFilterClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Treshold</button>
+        <div ref={histogramTabRef} className="gap-2 w-full hidden">
+          <button onClick={onUpdateHistogramClick} className="bg-sky-800 p-2 rounded text-white font-bold w-full">Update Histogram</button>
+
+          <HistogramChart ref={histogramChartRef} />
         </div>
-
-        <button onClick={onFlipLeftRightClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Flip Left-Right</button>
-        <button onClick={onFlipTopDownClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Flip Top-Down</button>
-        <button onClick={onAddImagesClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Add Images</button>
-        <button onClick={onConcatImagesClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Concat Images</button>
-
-        <button onClick={onUpdateHistogramClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Update Histogram</button>
-
-        <HistogramChart ref={histogramChartRef} />
       </div>
 
       <div className="flex-1 outline outline-sky-500 p-2">
@@ -240,6 +266,6 @@ export default function Home() {
         <button onClick={onSetAsSecondImageClick} className="bg-sky-800 p-2 mt-2 rounded text-white font-bold w-full">Set as Second Image</button>
         <button onClick={onDownloadImageClick} className="bg-sky-800 p-2 mt-2 rounded text-white font-bold w-full">Download Image</button>
       </div>
-    </main>
+    </main >
   );
 }
