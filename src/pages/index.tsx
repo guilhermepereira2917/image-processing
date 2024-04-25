@@ -6,6 +6,7 @@ import AddImageFilter from "@/classes/filters/AddImageFilter";
 import BrightnessFilter from "@/classes/filters/BrightnessFilter";
 import ConcatImageFilter from "@/classes/filters/ConcatImageFilter";
 import CropImageFilter from "@/classes/filters/CropImageFilter";
+import EqualizeHistogramFilter from "@/classes/filters/EqualizeHistogramFilter";
 import FlipLeftRightFilter from "@/classes/filters/FlipLeftRightFilter";
 import FlipTopDownFilter from "@/classes/filters/FlipTopDownFilter";
 import NegativeFilter from "@/classes/filters/NegativeFilter";
@@ -136,6 +137,12 @@ export default function Home() {
     histogramChartRef.current?.updateHistogram(filterApplier.firstUploadedImage);
   }
 
+  function onEqualizeHistogramClick(): void {
+    filterApplier.applyFilterToFirstImage((firstImage: RgbImage) => {
+      return new EqualizeHistogramFilter().equalize(firstImage);
+    });
+  }
+
   const filtersTabRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
   const histogramTabRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
 
@@ -254,6 +261,8 @@ export default function Home() {
           <button onClick={onUpdateHistogramClick} className="bg-sky-800 p-2 rounded text-white font-bold w-full">Update Histogram</button>
 
           <HistogramChart ref={histogramChartRef} />
+
+          <button onClick={onEqualizeHistogramClick} className="bg-sky-800 p-2 rounded text-white font-bold w-full">Equalize Histogram</button>
         </div>
       </div>
 

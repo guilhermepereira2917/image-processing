@@ -42,6 +42,10 @@ export class RgbImage {
     return this.pixels.length;
   }
 
+  totalPixels(): number {
+    return this.width() * this.height();
+  }
+
   clone(): RgbImage {
     const clonedPixels: RgbPixel[][] = [];
 

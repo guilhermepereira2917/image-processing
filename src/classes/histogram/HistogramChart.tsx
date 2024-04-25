@@ -39,7 +39,7 @@ export default class HistogramChart extends Component<{}, State> {
     }
 
     const data = {
-      labels: Array.from({ length: 255 }, (_, index) => String(index)),
+      labels: Array.from({ length: 256 }, (_, index) => String(index)),
       datasets: [
         {
           fill: true,
