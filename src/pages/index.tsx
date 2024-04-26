@@ -9,6 +9,7 @@ import CropImageFilter from "@/classes/filters/CropImageFilter";
 import EqualizeHistogramFilter from "@/classes/filters/EqualizeHistogramFilter";
 import FlipLeftRightFilter from "@/classes/filters/FlipLeftRightFilter";
 import FlipTopDownFilter from "@/classes/filters/FlipTopDownFilter";
+import LinearBlendingFilter from "@/classes/filters/LinearBlendingFilter";
 import NegativeFilter from "@/classes/filters/NegativeFilter";
 import TresholdFilter from "@/classes/filters/TresholdFilter";
 import HistogramChart from "@/classes/histogram/HistogramChart";
@@ -131,6 +132,15 @@ export default function Home() {
       return new ConcatImageFilter().concat(firstImage, secondImage);
     });
   }
+
+  const linearBlendingValueRef: RefObject<HTMLInputElement> = useRef<HTMLInputElement>(null);
+  function onLinearBlendingFilterClick(): void {
+    const blendingRatio: number = (linearBlendingValueRef.current?.valueAsNumber || 50) / 100;
+
+    filterApplier.applyFilterToBothImages((firstImage: RgbImage, secondImage: RgbImage) => {
+      return new LinearBlendingFilter().blend(firstImage, secondImage, blendingRatio);
+    });
+  };
 
   const histogramChartRef: RefObject<HistogramChart> = useRef<HistogramChart>(null);
   function onUpdateHistogramClick(): void {
@@ -264,8 +274,13 @@ export default function Home() {
 
           <button onClick={onFlipLeftRightClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Flip Left-Right</button>
           <button onClick={onFlipTopDownClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Flip Top-Down</button>
-          <button onClick={onAddImagesClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Add Images</button>
-          <button onClick={onConcatImagesClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Concat Images</button>
+          <button onClick={onAddImagesClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Add</button>
+          <button onClick={onConcatImagesClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Concat</button>
+
+          <div className="flex flex-col">
+            <input ref={linearBlendingValueRef} type="range" min="0" max="100" defaultValue="50" step="1" />
+            <button onClick={onLinearBlendingFilterClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Linear Blending</button>
+          </div>
         </div>
 
         <div ref={histogramTabRef} className="gap-2 w-full hidden">
