@@ -137,10 +137,15 @@ export default function Home() {
     histogramChartRef.current?.updateHistogram(filterApplier.firstUploadedImage);
   }
 
+  const equalizedHistogramChartRef: RefObject<HistogramChart> = useRef<HistogramChart>(null);
+
   function onEqualizeHistogramClick(): void {
     filterApplier.applyFilterToFirstImage((firstImage: RgbImage) => {
       return new EqualizeHistogramFilter().equalize(firstImage);
     });
+
+    histogramChartRef.current?.updateHistogram(filterApplier.firstUploadedImage);
+    equalizedHistogramChartRef.current?.updateHistogram(filterApplier.convertedImage);
   }
 
   const filtersTabRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
@@ -269,6 +274,8 @@ export default function Home() {
           <HistogramChart ref={histogramChartRef} />
 
           <button onClick={onEqualizeHistogramClick} className="bg-sky-800 p-2 rounded text-white font-bold w-full">Equalize Histogram</button>
+
+          <HistogramChart ref={equalizedHistogramChartRef} />
         </div>
       </div>
 
