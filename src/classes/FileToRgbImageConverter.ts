@@ -1,4 +1,5 @@
 import { RgbImage, RgbPixel } from "./RgbImage";
+import ResizeFilter from "./filters/ResizeFilter";
 
 export default class FileToRgbImageConverter {
   convert(file: File): Promise<RgbImage> {
@@ -42,7 +43,10 @@ export default class FileToRgbImageConverter {
             }
           }
 
-          resolve(new RgbImage(pixels));
+          const pixelsImage: RgbImage = new RgbImage(pixels);
+          const resizedImage: RgbImage = new ResizeFilter().resize(pixelsImage, 256, 256);
+
+          resolve(resizedImage);
         }
 
         image.src = event.target?.result as string;

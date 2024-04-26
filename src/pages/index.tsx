@@ -202,28 +202,34 @@ export default function Home() {
 
   return (
     <main className="w-screen p-2 flex flex-wrap justify-center items-center">
-      <div className="flex-1 flex flex-col justify-center outline p-2 outline-sky-500">
-        <div className="flex justify-between mt-2">
-          <div className="flex flex-col flex-wrap">
-            <label htmlFor="firstUploadedImage">Upload an image</label>
-            <input type="file" name="firstUploadedImage" accept="image/png, image/jpeg" onChange={onFirstImageChange} />
+      <div className="flex-1 flex flex-col items-center justify-center">
+        <div className="p-2 outline outline-sky-500">
+          <div className="flex justify-between mt-2">
+            <div className="flex flex-col flex-wrap">
+              <label htmlFor="firstUploadedImage">Upload an image</label>
+              <input type="file" name="firstUploadedImage" accept="image/png, image/jpeg" onChange={onFirstImageChange} />
+            </div>
+
+            <button onClick={onClearFirstImageClick} className="bg-sky-800 p-2 rounded text-white font-bold w-24">Clear</button>
           </div>
 
-          <button onClick={onClearFirstImageClick} className="bg-sky-800 p-2 rounded text-white font-bold w-24">Clear</button>
-        </div>
-
-        <canvas className="mt-2 outline outline-sky-500" id="firstUploadedImageCanvas" />
-
-        <div className="flex justify-between mt-2">
-          <div className="flex flex-col flex-wrap">
-            <label htmlFor="secondUploadedImage">Upload another image</label>
-            <input type="file" name="secondUploadedImage" accept="image/png, image/jpeg" onChange={onSecondImageChange} />
+          <div className="flex justify-center items-center">
+            <canvas className="w-[256px] h-[256px] mt-2 outline outline-sky-500" id="firstUploadedImageCanvas" />
           </div>
 
-          <button onClick={onClearSecondImageClick} className="bg-sky-800 p-2 rounded text-white font-bold w-24">Clear</button>
-        </div>
+          <div className="flex justify-between mt-2">
+            <div className="flex flex-col flex-wrap">
+              <label htmlFor="secondUploadedImage">Upload another image</label>
+              <input type="file" name="secondUploadedImage" accept="image/png, image/jpeg" onChange={onSecondImageChange} />
+            </div>
 
-        <canvas className="mt-2 outline outline-sky-500 w-full" id="secondUploadedImageCanvas" />
+            <button onClick={onClearSecondImageClick} className="bg-sky-800 p-2 rounded text-white font-bold w-24">Clear</button>
+          </div>
+
+          <div className="flex justify-center items-center">
+            <canvas className="w-[256px] h-[256px] mt-2 outline outline-sky-500" id="secondUploadedImageCanvas" />
+          </div>
+        </div>
       </div>
 
       <div className="flex-1 flex-grow p-2 flex flex-col gap-2 items-center justify-center">
@@ -266,14 +272,18 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="flex-1 outline outline-sky-500 p-2">
-        <label>Converted image</label>
-        <canvas className="mt-2 outline outline-sky-500 w-full" id="convertedImageCanvas" />
+      <div className="flex-1 flex items-center justify-center">
+        <div className="p-2 outline outline-sky-500">
+          <label>Converted image</label>
 
+          <div className="flex justify-center items-center">
+            <canvas className="w-[256px] h-[256px] mt-2 outline outline-sky-500" id="convertedImageCanvas" />
+          </div>
 
-        <button onClick={onSetAsFirstImageClick} className="bg-sky-800 p-2 mt-2 rounded text-white font-bold w-full">Set as First Image</button>
-        <button onClick={onSetAsSecondImageClick} className="bg-sky-800 p-2 mt-2 rounded text-white font-bold w-full">Set as Second Image</button>
-        <button onClick={onDownloadImageClick} className="bg-sky-800 p-2 mt-2 rounded text-white font-bold w-full">Download Image</button>
+          <button onClick={onSetAsFirstImageClick} className="bg-sky-800 p-2 mt-2 rounded text-white font-bold w-full">Set as First Image</button>
+          <button onClick={onSetAsSecondImageClick} className="bg-sky-800 p-2 mt-2 rounded text-white font-bold w-full">Set as Second Image</button>
+          <button onClick={onDownloadImageClick} className="bg-sky-800 p-2 mt-2 rounded text-white font-bold w-full">Download Image</button>
+        </div>
       </div>
     </main >
   );
