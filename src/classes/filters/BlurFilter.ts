@@ -1,7 +1,7 @@
 import { RgbImage, RgbPixel } from "../RgbImage";
 
 export default class BlurFilter {
-  blur(image: RgbImage): RgbImage {
+  blur(image: RgbImage, range: number): RgbImage {
     const bluredImage: RgbImage = image.clone();
 
     bluredImage.pixels.forEach((row: RgbPixel[], bluredImageRowIndex: number) => {
@@ -11,12 +11,10 @@ export default class BlurFilter {
         let blue: number = 0;
         let pixelCount: number = 0;
 
-        for (let row = bluredImageRowIndex - 1; row <= bluredImageRowIndex + 1; row++) {
-          for (let column = bluredImageColumnIndex - 1; column <= bluredImageColumnIndex + 1; column++) {
-            const pixel: RgbPixel | undefined = image.getPixel(row, column);
-
+        image.getPixelRange(bluredImageRowIndex, bluredImageColumnIndex, range).forEach((imageRow: (RgbPixel | undefined)[]) => {
+          imageRow.forEach((pixel: RgbPixel | undefined) => {
             if (!pixel) {
-              continue;
+              return;
             }
 
             red += pixel.red;
@@ -24,8 +22,8 @@ export default class BlurFilter {
             blue += pixel.blue;
 
             pixelCount++;
-          }
-        }
+          });
+        });
 
         bluredImagePixel.red = red / pixelCount;
         bluredImagePixel.green = green / pixelCount;

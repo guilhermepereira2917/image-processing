@@ -42,6 +42,22 @@ export class RgbImage {
     return this.pixels[rowIndex][columnIndex];
   }
 
+  getPixelRange(rowIndex: number, columnIndex: number, range: number): (RgbPixel | undefined)[][] {
+    const pixelRange: (RgbPixel | undefined)[][] = [];
+
+    for (let row = rowIndex - range; row <= rowIndex + range; row++) {
+      const pixelRangeRow: (RgbPixel | undefined)[] = [];
+
+      for (let column = columnIndex - range; column <= columnIndex + range; column++) {
+        pixelRangeRow.push(this.getPixel(row, column));
+      }
+      
+      pixelRange.push(pixelRangeRow);
+    }
+
+    return pixelRange;
+  }
+
   width(): number {
     return this.pixels[0].length;
   }

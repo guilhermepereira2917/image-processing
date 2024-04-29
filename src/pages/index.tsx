@@ -143,9 +143,12 @@ export default function Home() {
     });
   }
 
+  const blurKernelSizeRef: RefObject<HTMLInputElement> = useRef<HTMLInputElement>(null);
   function onBlurFilterClick(): void {
+    const kernelSize: number = blurKernelSizeRef.current?.valueAsNumber || 1;
+
     filterApplier.applyFilterToFirstImage((firstImage: RgbImage): RgbImage => {
-      return new BlurFilter().blur(firstImage);
+      return new BlurFilter().blur(firstImage, kernelSize);
     });
   }
 
@@ -289,7 +292,10 @@ export default function Home() {
             <button onClick={onLinearBlendingFilterClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Linear Blending</button>
           </div>
 
-          <button onClick={onBlurFilterClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Blur</button>
+          <div className="flex flex-col">
+            <input ref={blurKernelSizeRef} type="range" min="1" max="5" defaultValue="1" step="1" />
+            <button onClick={onBlurFilterClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Blur</button>
+          </div>
         </div>
 
         <div ref={histogramTabRef} className="gap-2 w-full hidden">
