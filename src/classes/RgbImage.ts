@@ -34,6 +34,14 @@ export class RgbImage {
     this.pixels = pixels;
   }
 
+  getPixel(rowIndex: number, columnIndex: number): RgbPixel | undefined {
+    if (rowIndex < 0 || rowIndex >= this.height() || columnIndex < 0 || columnIndex >= this.width()) {
+      return undefined;
+    }
+
+    return this.pixels[rowIndex][columnIndex];
+  }
+
   width(): number {
     return this.pixels[0].length;
   }

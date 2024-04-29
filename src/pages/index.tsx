@@ -3,6 +3,7 @@ import FilterApplier from "@/classes/FilterApplier";
 import { RgbImage } from "@/classes/RgbImage";
 import RgbImageCanvasDrawer from "@/classes/RgbImageCanvasDrawer";
 import AddImageFilter from "@/classes/filters/AddImageFilter";
+import BlurFilter from "@/classes/filters/BlurFilter";
 import BrightnessFilter from "@/classes/filters/BrightnessFilter";
 import ConcatImageFilter from "@/classes/filters/ConcatImageFilter";
 import CropImageFilter from "@/classes/filters/CropImageFilter";
@@ -140,7 +141,13 @@ export default function Home() {
     filterApplier.applyFilterToBothImages((firstImage: RgbImage, secondImage: RgbImage) => {
       return new LinearBlendingFilter().blend(firstImage, secondImage, blendingRatio);
     });
-  };
+  }
+
+  function onBlurFilterClick(): void {
+    filterApplier.applyFilterToFirstImage((firstImage: RgbImage): RgbImage => {
+      return new BlurFilter().blur(firstImage);
+    });
+  }
 
   const histogramChartRef: RefObject<HistogramChart> = useRef<HistogramChart>(null);
   function onUpdateHistogramClick(): void {
@@ -281,6 +288,8 @@ export default function Home() {
             <input ref={linearBlendingValueRef} type="range" min="0" max="100" defaultValue="50" step="1" />
             <button onClick={onLinearBlendingFilterClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Linear Blending</button>
           </div>
+
+          <button onClick={onBlurFilterClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Blur</button>
         </div>
 
         <div ref={histogramTabRef} className="gap-2 w-full hidden">
