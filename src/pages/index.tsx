@@ -14,6 +14,7 @@ import LinearBlendingFilter from "@/classes/filters/LinearBlendingFilter";
 import NegativeFilter from "@/classes/filters/NegativeFilter";
 import TresholdFilter from "@/classes/filters/TresholdFilter";
 import HistogramChart from "@/classes/histogram/HistogramChart";
+import CustomButton from "@/components/CustomButton";
 import React, { RefObject, useRef } from "react";
 
 export default function Home() {
@@ -235,7 +236,7 @@ export default function Home() {
               <input type="file" name="firstUploadedImage" accept="image/png, image/jpeg" onChange={onFirstImageChange} />
             </div>
 
-            <button onClick={onClearFirstImageClick} className="bg-sky-800 p-2 rounded text-white font-bold w-24">Clear</button>
+            <CustomButton text="Clear" onClick={onClearFirstImageClick} />
           </div>
 
           <div className="flex justify-center items-center">
@@ -248,7 +249,7 @@ export default function Home() {
               <input type="file" name="secondUploadedImage" accept="image/png, image/jpeg" onChange={onSecondImageChange} />
             </div>
 
-            <button onClick={onClearSecondImageClick} className="bg-sky-800 p-2 rounded text-white font-bold w-24">Clear</button>
+            <CustomButton text="Clear" onClick={onClearSecondImageClick} />
           </div>
 
           <div className="flex justify-center items-center">
@@ -267,44 +268,42 @@ export default function Home() {
           <div className="flex flex-col">
             <input type="number" id="cropImageWidthInput" placeholder="width" className="border w-36" />
             <input type="number" id="cropImageHeightInput" placeholder="height" className="border w-36" />
-            <button onClick={onCropImageClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Crop Image</button>
+            <CustomButton text="Crop " onClick={onCropImageClick} />
           </div>
 
           <button onClick={onNegativeFilterClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Negative</button>
 
           <div className="flex flex-col">
             <input id="brightnessValue" type="range" min="0" max="1000" defaultValue="100" step="10" />
-            <button onClick={onBrightnessFilterClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Brightness</button>
+            <CustomButton text="Brightness" onClick={onBrightnessFilterClick} />
           </div>
 
           <div className="flex flex-col">
             <input id="tresholdValue" type="range" min="0" max="255" defaultValue="127" step="1" />
-            <button onClick={onThresholdFilterClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Treshold</button>
+            <CustomButton text="Treshold" onClick={onThresholdFilterClick} />
           </div>
 
-          <button onClick={onFlipLeftRightClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Flip Left-Right</button>
-          <button onClick={onFlipTopDownClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Flip Top-Down</button>
-          <button onClick={onAddImagesClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Add</button>
-          <button onClick={onConcatImagesClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Concat</button>
+          <CustomButton text="Flip Left-Right" onClick={onFlipLeftRightClick} />
+          <CustomButton text="Flip Top-Down" onClick={onFlipTopDownClick} />
+          <CustomButton text="Add" onClick={onAddImagesClick} />
+          <CustomButton text="Concat" onClick={onConcatImagesClick} />
 
           <div className="flex flex-col">
             <input ref={linearBlendingValueRef} type="range" min="0" max="100" defaultValue="50" step="1" />
-            <button onClick={onLinearBlendingFilterClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Linear Blending</button>
+            <CustomButton text="Linear Blending" onClick={onLinearBlendingFilterClick} />
           </div>
 
           <div className="flex flex-col">
             <input ref={blurKernelSizeRef} type="range" min="1" max="5" defaultValue="1" step="1" />
-            <button onClick={onBlurFilterClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Blur</button>
+            <CustomButton text="Blur" onClick={onBlurFilterClick} />
           </div>
         </div>
 
         <div ref={histogramTabRef} className="gap-2 w-full hidden">
-          <button onClick={onUpdateHistogramClick} className="bg-sky-800 p-2 rounded text-white font-bold w-full">Update Histogram</button>
-
+          <CustomButton text="Update Histogram" onClick={onUpdateHistogramClick} />
           <HistogramChart ref={histogramChartRef} />
 
-          <button onClick={onEqualizeHistogramClick} className="bg-sky-800 p-2 rounded text-white font-bold w-full">Equalize Histogram</button>
-
+          <CustomButton text="Equalize Histogram" onClick={onEqualizeHistogramClick} />
           <HistogramChart ref={equalizedHistogramChartRef} />
         </div>
       </div>
@@ -317,9 +316,11 @@ export default function Home() {
             <canvas className="w-[256px] h-[256px] mt-2 outline outline-sky-500" id="convertedImageCanvas" />
           </div>
 
-          <button onClick={onSetAsFirstImageClick} className="bg-sky-800 p-2 mt-2 rounded text-white font-bold w-full">Set as First Image</button>
-          <button onClick={onSetAsSecondImageClick} className="bg-sky-800 p-2 mt-2 rounded text-white font-bold w-full">Set as Second Image</button>
-          <button onClick={onDownloadImageClick} className="bg-sky-800 p-2 mt-2 rounded text-white font-bold w-full">Download Image</button>
+          <div className="flex flex-column flex-wrap gap-2 mt-2">
+            <CustomButton text="Set as First Image" onClick={onSetAsFirstImageClick} />
+            <CustomButton text="Sett as Second Image" onClick={onSetAsSecondImageClick} />
+            <CustomButton text="Download Image" onClick={onDownloadImageClick} />
+          </div>
         </div>
       </div>
     </main >
