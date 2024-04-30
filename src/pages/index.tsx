@@ -15,6 +15,7 @@ import NegativeFilter from "@/classes/filters/NegativeFilter";
 import TresholdFilter from "@/classes/filters/TresholdFilter";
 import HistogramChart from "@/classes/histogram/HistogramChart";
 import CustomButton from "@/components/CustomButton";
+import CustomSlider from "@/components/CustomSlider";
 import React, { RefObject, useRef } from "react";
 
 export default function Home() {
@@ -101,17 +102,21 @@ export default function Home() {
     filterApplier.applyFilterToFirstImage((image: RgbImage) => { return new NegativeFilter().apply(image) })
   }
 
+  const brightnessSliderRef: RefObject<CustomSlider> = useRef<CustomSlider>(null);
   function onBrightnessFilterClick(): void {
+    const brightnessValue: number = brightnessSliderRef.current ? brightnessSliderRef.current.getValue() / 100 : 100;
+
     filterApplier.applyFilterToFirstImage((image: RgbImage) => {
-      const brightness: number = (document.getElementById('brightnessValue') as HTMLInputElement).value as unknown as number / 100;
-      return new BrightnessFilter().apply(image, brightness);
+      return new BrightnessFilter().apply(image, brightnessValue);
     })
   }
 
+  const tresholdSliderRef: RefObject<CustomSlider> = useRef<CustomSlider>(null);
   function onThresholdFilterClick(): void {
+    const tresholdValue: number = tresholdSliderRef.current ? tresholdSliderRef.current.getValue() : 127;
+
     filterApplier.applyFilterToFirstImage((image: RgbImage) => {
-      const thresold: number = (document.getElementById('tresholdValue') as HTMLInputElement).value as unknown as number;
-      return new TresholdFilter().apply(image, thresold);
+      return new TresholdFilter().apply(image, tresholdValue);
     });
   }
 
@@ -135,18 +140,18 @@ export default function Home() {
     });
   }
 
-  const linearBlendingValueRef: RefObject<HTMLInputElement> = useRef<HTMLInputElement>(null);
+  const linearSliderRef: RefObject<CustomSlider> = useRef<CustomSlider>(null);
   function onLinearBlendingFilterClick(): void {
-    const blendingRatio: number = (linearBlendingValueRef.current?.valueAsNumber || 50) / 100;
+    const blendingRatio: number = (linearSliderRef.current ? linearSliderRef.current.getValue() : 50) / 100;
 
     filterApplier.applyFilterToBothImages((firstImage: RgbImage, secondImage: RgbImage) => {
       return new LinearBlendingFilter().blend(firstImage, secondImage, blendingRatio);
     });
   }
 
-  const blurKernelSizeRef: RefObject<HTMLInputElement> = useRef<HTMLInputElement>(null);
+  const blurSliderRef: RefObject<CustomSlider> = useRef<CustomSlider>(null);
   function onBlurFilterClick(): void {
-    const kernelSize: number = blurKernelSizeRef.current?.valueAsNumber || 1;
+    const kernelSize: number = blurSliderRef.current ? blurSliderRef.current.getValue() : 1;
 
     filterApplier.applyFilterToFirstImage((firstImage: RgbImage): RgbImage => {
       return new BlurFilter().blur(firstImage, kernelSize);
@@ -266,37 +271,29 @@ export default function Home() {
 
         <div ref={filtersTabRef} className="flex flex-col gap-2">
           <div className="flex flex-col">
-            <input type="number" id="cropImageWidthInput" placeholder="width" className="border w-36" />
-            <input type="number" id="cropImageHeightInput" placeholder="height" className="border w-36" />
+            <input type="number" id="cropImageWidthInput" placeholder="width" className="border w-full" />
+            <input type="number" id="cropImageHeightInput" placeholder="height" className="border w-full" />
             <CustomButton text="Crop " onClick={onCropImageClick} />
           </div>
 
-          <button onClick={onNegativeFilterClick} className="bg-sky-800 p-2 rounded text-white font-bold w-36">Negative</button>
+          <CustomButton text="Negative" onClick={onNegativeFilterClick} />
 
-          <div className="flex flex-col">
-            <input id="brightnessValue" type="range" min="0" max="1000" defaultValue="100" step="10" />
-            <CustomButton text="Brightness" onClick={onBrightnessFilterClick} />
-          </div>
+          <CustomSlider text="Brightness" ref={brightnessSliderRef} onClick={onBrightnessFilterClick} min={0} max={1000} defaultValue={100} step={10}
+            renderAditionalText={(value: number): string => { return ` ${value}%` }} />
 
-          <div className="flex flex-col">
-            <input id="tresholdValue" type="range" min="0" max="255" defaultValue="127" step="1" />
-            <CustomButton text="Treshold" onClick={onThresholdFilterClick} />
-          </div>
+          <CustomSlider text="Treshold" ref={tresholdSliderRef} onClick={onThresholdFilterClick} min={0} max={255} defaultValue={127} step={1}
+            renderAditionalText={(value: number): string => { return ` ${value}` }} />
 
           <CustomButton text="Flip Left-Right" onClick={onFlipLeftRightClick} />
           <CustomButton text="Flip Top-Down" onClick={onFlipTopDownClick} />
           <CustomButton text="Add" onClick={onAddImagesClick} />
           <CustomButton text="Concat" onClick={onConcatImagesClick} />
 
-          <div className="flex flex-col">
-            <input ref={linearBlendingValueRef} type="range" min="0" max="100" defaultValue="50" step="1" />
-            <CustomButton text="Linear Blending" onClick={onLinearBlendingFilterClick} />
-          </div>
+          <CustomSlider text="Linear Blending" ref={linearSliderRef} onClick={onLinearBlendingFilterClick} min={0} max={100} defaultValue={50} step={1}
+            renderAditionalText={(value: number): string => { return ` ${value}%` }} />
 
-          <div className="flex flex-col">
-            <input ref={blurKernelSizeRef} type="range" min="1" max="5" defaultValue="1" step="1" />
-            <CustomButton text="Blur" onClick={onBlurFilterClick} />
-          </div>
+          <CustomSlider text="Blur" ref={blurSliderRef} onClick={onBlurFilterClick} min={1} max={5} defaultValue={1} step={1}
+            renderAditionalText={(value: number): string => { return ` ${value} X ${value}` }} />
         </div>
 
         <div ref={histogramTabRef} className="gap-2 w-full hidden">
