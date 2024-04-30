@@ -17,6 +17,8 @@ import HistogramChart from "@/components/HistogramChart";
 import CustomButton from "@/components/CustomButton";
 import CustomSlider from "@/components/CustomSlider";
 import React, { RefObject, useRef } from "react";
+import MinimumFilter from "@/classes/filters/MinimumFilter";
+import MaximumFilter from "@/classes/filters/MaximumFilter";
 
 export default function Home() {
 
@@ -153,8 +155,26 @@ export default function Home() {
   function onBlurFilterClick(): void {
     const kernelSize: number = blurSliderRef.current ? blurSliderRef.current.getValue() : 1;
 
-    filterApplier.applyFilterToFirstImage((firstImage: RgbImage): RgbImage => {
-      return new BlurFilter().blur(firstImage, kernelSize);
+    filterApplier.applyFilterToFirstImage((image: RgbImage): RgbImage => {
+      return new BlurFilter().blur(image, kernelSize);
+    });
+  }
+
+  const maximumSliderRef: RefObject<CustomSlider> = useRef<CustomSlider>(null);
+  function onMaximumFilterClick(): void {
+    const kernelSize: number = maximumSliderRef.current ? maximumSliderRef.current.getValue() : 1;
+
+    filterApplier.applyFilterToFirstImage((image: RgbImage): RgbImage => {
+      return new MaximumFilter().apply(image, kernelSize);
+    });
+  }
+
+  const minimumSliderRef: RefObject<CustomSlider> = useRef<CustomSlider>(null);
+  function onMinimunFilterClick(): void {
+    const kernelSize: number = minimumSliderRef.current ? minimumSliderRef.current.getValue() : 1;
+
+    filterApplier.applyFilterToFirstImage((image: RgbImage): RgbImage => {
+      return new MinimumFilter().apply(image, kernelSize);
     });
   }
 
@@ -293,6 +313,10 @@ export default function Home() {
             renderAditionalText={(value: number): string => { return ` ${value}%` }} />
 
           <CustomSlider text="Blur" ref={blurSliderRef} onClick={onBlurFilterClick} min={1} max={5} defaultValue={1} step={1}
+            renderAditionalText={(value: number): string => { return ` ${value} X ${value}` }} />
+          <CustomSlider text="Maximum" ref={maximumSliderRef} onClick={onMaximumFilterClick} min={1} max={5} defaultValue={1} step={1}
+            renderAditionalText={(value: number): string => { return ` ${value} X ${value}` }} />
+          <CustomSlider text="Minimum" ref={minimumSliderRef} onClick={onMinimunFilterClick} min={1} max={5} defaultValue={1} step={1}
             renderAditionalText={(value: number): string => { return ` ${value} X ${value}` }} />
         </div>
 
