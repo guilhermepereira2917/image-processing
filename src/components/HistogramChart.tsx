@@ -3,9 +3,9 @@
 import { BarElement, CategoryScale, Chart, Filler, Legend, LineElement, LinearScale, PointElement, Title, Tooltip } from "chart.js";
 import { Component, ReactNode, createRef, useState } from "react";
 import { Bar } from "react-chartjs-2";
-import { RgbImage } from "../RgbImage";
-import HistogramData from "./HistogramData";
-import HistogramDataGenerator from "./HistogramDataGenerator";
+import { RgbImage } from "../classes/RgbImage";
+import HistogramData from "../classes/histogram/HistogramData";
+import HistogramDataGenerator from "../classes/histogram/HistogramDataGenerator";
 
 Chart.register(
   CategoryScale,

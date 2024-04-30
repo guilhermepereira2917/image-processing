@@ -13,7 +13,7 @@ import FlipTopDownFilter from "@/classes/filters/FlipTopDownFilter";
 import LinearBlendingFilter from "@/classes/filters/LinearBlendingFilter";
 import NegativeFilter from "@/classes/filters/NegativeFilter";
 import TresholdFilter from "@/classes/filters/TresholdFilter";
-import HistogramChart from "@/classes/histogram/HistogramChart";
+import HistogramChart from "@/components/HistogramChart";
 import CustomButton from "@/components/CustomButton";
 import CustomSlider from "@/components/CustomSlider";
 import React, { RefObject, useRef } from "react";
