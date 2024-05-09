@@ -1,20 +1,16 @@
 import { BinaryImage, BinaryPixel, BinaryPixelValueEnum } from "../BinaryImage";
+import BinaryFilter from "./BinaryFilter";
 
 export default class BinaryAndFilter {
   apply(firstImage: BinaryImage, secondImage: BinaryImage): BinaryImage {
+    const binaryAndOperation = (firstPixel: BinaryPixel, secondPixel: BinaryPixel): BinaryPixelValueEnum => {
+      if (firstPixel.isWhite() && secondPixel.isWhite()) {
+        return BinaryPixelValueEnum.white;
+      }
 
-    firstImage.pixels.forEach((row: BinaryPixel[], rowIndex) => {
-      row.forEach((firstImagePixel: BinaryPixel, columnIndex) => {
-        const secondImagePixel: BinaryPixel = secondImage.pixels[rowIndex][columnIndex];
+      return BinaryPixelValueEnum.black;
+    }
 
-        if (firstImagePixel.isWhite() && secondImagePixel.isWhite()) {
-          firstImagePixel.value = BinaryPixelValueEnum.white;
-        } else {
-          firstImagePixel.value = BinaryPixelValueEnum.black;
-        }
-      });
-    });
-
-    return firstImage;
+    return new BinaryFilter().apply(firstImage, secondImage, binaryAndOperation);
   }
 }
