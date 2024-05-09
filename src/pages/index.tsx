@@ -19,6 +19,7 @@ import CustomSlider from "@/components/CustomSlider";
 import React, { RefObject, useRef } from "react";
 import MinimumFilter from "@/classes/filters/MinimumFilter";
 import MaximumFilter from "@/classes/filters/MaximumFilter";
+import CodeSnippet from "@/components/CodeSnippet";
 
 export default function Home() {
 
@@ -293,7 +294,7 @@ export default function Home() {
           <div className="flex flex-col">
             <input type="number" id="cropImageWidthInput" placeholder="width" className="border w-full" />
             <input type="number" id="cropImageHeightInput" placeholder="height" className="border w-full" />
-            <CustomButton text="Crop " onClick={onCropImageClick} />
+            <CustomButton text="Crop " onClick={onCropImageClick} codeSnippetClass={CropImageFilter}/>
           </div>
 
           <CustomButton text="Negative" onClick={onNegativeFilterClick} />
