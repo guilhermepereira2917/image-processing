@@ -25,7 +25,7 @@ export default class FileToRgbImageConverter {
           const imageData: ImageData = context.getImageData(0, 0, canvas.width, canvas.height);
           const data: Uint8ClampedArray = imageData.data;
 
-          const pixels: RgbPixel[][] = []
+          const convertedImage: RgbImage = new RgbImage();
           let pixelsRow: RgbPixel[] = [];
 
           for (let i = 0; i < data.length; i += 4) {
@@ -38,14 +38,12 @@ export default class FileToRgbImageConverter {
             pixelsRow.push(pixel);
 
             if (pixelsRow.length >= canvas.width) {
-              pixels.push(pixelsRow);
+              convertedImage.pixels.push(pixelsRow);
               pixelsRow = [];
             }
           }
 
-          const pixelsImage: RgbImage = new RgbImage(pixels);
-          const resizedImage: RgbImage = new ResizeFilter().resize(pixelsImage, 256, 256);
-
+          const resizedImage: RgbImage = new ResizeFilter().resize(convertedImage, 256, 256);
           resolve(resizedImage);
         }
 

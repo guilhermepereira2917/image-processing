@@ -25,14 +25,18 @@ export class RgbPixel {
     this.green = Math.min(Math.max(this.green, 0), 255);
     this.blue = Math.min(Math.max(this.blue, 0), 255);
   }
+
+  isWhite(): boolean {
+    return this.red == 255 && this.green == 255 && this.blue == 255;
+  }
+
+  isBlack(): boolean {
+    return this.red == 0 && this.green == 0 && this.blue == 0;
+  }
 }
 
 export class RgbImage {
-  pixels: RgbPixel[][];
-
-  constructor(pixels: RgbPixel[][]) {
-    this.pixels = pixels;
-  }
+  pixels: RgbPixel[][] = [];
 
   getPixel(rowIndex: number, columnIndex: number): RgbPixel | undefined {
     if (rowIndex < 0 || rowIndex >= this.height() || columnIndex < 0 || columnIndex >= this.width()) {
@@ -51,7 +55,7 @@ export class RgbImage {
       for (let column = columnIndex - range; column <= columnIndex + range; column++) {
         pixelRangeRow.push(this.getPixel(row, column));
       }
-      
+
       pixelRange.push(pixelRangeRow);
     }
 
@@ -71,7 +75,7 @@ export class RgbImage {
   }
 
   clone(): RgbImage {
-    const clonedPixels: RgbPixel[][] = [];
+    const clonedImage: RgbImage = new RgbImage();
 
     for (let y = 0; y < this.height(); y++) {
       const row: RgbPixel[] = [];
@@ -79,10 +83,10 @@ export class RgbImage {
         const pixel = this.pixels[y][x];
         row.push(pixel.clone());
       }
-      clonedPixels.push(row);
+      clonedImage.pixels.push(row);
     }
 
-    return new RgbImage(clonedPixels);
+    return clonedImage;
   }
 
   normalize(): RgbImage {

@@ -18,8 +18,6 @@ export default class CodeSnippet extends React.Component<CodeSnippetProps> {
   }
 
   render() {
-    console.log('rendered');
-    
     return (
       <pre>
         <code ref={this.codeRef} className={`typescript ${this.props.classname}`}>
@@ -38,9 +36,7 @@ export default class CodeSnippet extends React.Component<CodeSnippetProps> {
   }
 
   update() {
-    console.log('tried to update')
     if (this.codeRef.current) {
-      console.log('updated')
       hljs.highlightBlock(this.codeRef.current);
     }
   }

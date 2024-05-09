@@ -2,7 +2,7 @@ import { RgbImage, RgbPixel } from "../RgbImage"
 
 export default class ResizeFilter {
   resize(image: RgbImage, width: number, height: number): RgbImage {
-    const pixels: RgbPixel[][] = [];
+    const resizedImage: RgbImage = new RgbImage();
 
     let scaleX = image.width() / width;
     let scaleY = image.height() / height;
@@ -17,9 +17,9 @@ export default class ResizeFilter {
         row.push(pixel);
       }
 
-      pixels.push(row);
+      resizedImage.pixels.push(row);
     }
     
-    return new RgbImage(pixels);
+    return resizedImage;
   };
 };

@@ -1,8 +1,10 @@
+import { BinaryImage } from "@/classes/BinaryImage";
 import FileToRgbImageConverter from "@/classes/FileToRgbImageConverter";
 import FilterApplier from "@/classes/FilterApplier";
 import { RgbImage } from "@/classes/RgbImage";
 import RgbImageCanvasDrawer from "@/classes/RgbImageCanvasDrawer";
 import AddImageFilter from "@/classes/filters/AddImageFilter";
+import BinaryAndFilter from "@/classes/filters/BinaryAndFilter";
 import BlurFilter from "@/classes/filters/BlurFilter";
 import BrightnessFilter from "@/classes/filters/BrightnessFilter";
 import ConcatImageFilter from "@/classes/filters/ConcatImageFilter";
@@ -11,15 +13,14 @@ import EqualizeHistogramFilter from "@/classes/filters/EqualizeHistogramFilter";
 import FlipLeftRightFilter from "@/classes/filters/FlipLeftRightFilter";
 import FlipTopDownFilter from "@/classes/filters/FlipTopDownFilter";
 import LinearBlendingFilter from "@/classes/filters/LinearBlendingFilter";
+import MaximumFilter from "@/classes/filters/MaximumFilter";
+import MinimumFilter from "@/classes/filters/MinimumFilter";
 import NegativeFilter from "@/classes/filters/NegativeFilter";
 import TresholdFilter from "@/classes/filters/TresholdFilter";
-import HistogramChart from "@/components/HistogramChart";
 import CustomButton from "@/components/CustomButton";
 import CustomSlider from "@/components/CustomSlider";
+import HistogramChart from "@/components/HistogramChart";
 import React, { RefObject, useRef } from "react";
-import MinimumFilter from "@/classes/filters/MinimumFilter";
-import MaximumFilter from "@/classes/filters/MaximumFilter";
-import CodeSnippet from "@/components/CodeSnippet";
 
 export default function Home() {
 
@@ -179,6 +180,12 @@ export default function Home() {
     });
   }
 
+  function onBinaryAndFilterClick(): void {
+    filterApplier.applyBinaryFilterToBothImages((firstImage: BinaryImage, secondImage: BinaryImage): BinaryImage => {
+      return new BinaryAndFilter().apply(firstImage, secondImage);
+    });
+  }
+
   const histogramChartRef: RefObject<HistogramChart> = useRef<HistogramChart>(null);
   function onUpdateHistogramClick(): void {
     histogramChartRef.current?.updateHistogram(filterApplier.firstUploadedImage);
@@ -196,16 +203,19 @@ export default function Home() {
   }
 
   const filtersTabRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
+  const binaryTabRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
   const histogramTabRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
 
-  function setFocusedTab(ref: RefObject<HTMLDivElement>): void {
-    if (filtersTabRef.current) {
-      filtersTabRef.current.classList.add("hidden");
-    }
+  const tabsRef: RefObject<HTMLDivElement>[] = [
+    filtersTabRef, binaryTabRef, histogramTabRef
+  ];
 
-    if (histogramTabRef.current) {
-      histogramTabRef.current.classList.add("hidden");
-    }
+  function setFocusedTab(ref: RefObject<HTMLDivElement>): void {
+    tabsRef.forEach((tabRef: RefObject<HTMLDivElement>) => {
+      if (tabRef.current) {
+        tabRef.current.classList.add("hidden");
+      }
+    });
 
     if (ref.current) {
       ref.current.classList.remove("hidden");
@@ -287,6 +297,7 @@ export default function Home() {
       <div className="flex-1 flex-grow p-2 flex flex-col gap-2 items-center justify-center">
         <div className="flex gap-2">
           <button onClick={() => setFocusedTab(filtersTabRef)} className="bg-slate-200 p-2">Filters</button>
+          <button onClick={() => setFocusedTab(binaryTabRef)} className="bg-slate-200 p-2">Binary</button>
           <button onClick={() => setFocusedTab(histogramTabRef)} className="bg-slate-200 p-2">Histogram</button>
         </div>
 
@@ -294,7 +305,7 @@ export default function Home() {
           <div className="flex flex-col">
             <input type="number" id="cropImageWidthInput" placeholder="width" className="border w-full" />
             <input type="number" id="cropImageHeightInput" placeholder="height" className="border w-full" />
-            <CustomButton text="Crop " onClick={onCropImageClick} codeSnippetClass={CropImageFilter}/>
+            <CustomButton text="Crop " onClick={onCropImageClick} codeSnippetClass={CropImageFilter} />
           </div>
 
           <CustomButton text="Negative" onClick={onNegativeFilterClick} />
@@ -319,6 +330,10 @@ export default function Home() {
             renderAditionalText={(value: number): string => { return ` ${value} X ${value}` }} />
           <CustomSlider text="Minimum" ref={minimumSliderRef} onClick={onMinimunFilterClick} min={1} max={5} defaultValue={1} step={1}
             renderAditionalText={(value: number): string => { return ` ${value} X ${value}` }} />
+        </div>
+
+        <div ref={binaryTabRef} className="gap-2 hidden">
+          <CustomButton text="AND" onClick={onBinaryAndFilterClick} />
         </div>
 
         <div ref={histogramTabRef} className="gap-2 w-full hidden">
