@@ -223,12 +223,13 @@ export default function Home() {
     equalizedHistogramChartRef.current?.updateHistogram(filterApplier.convertedImage);
   }
 
-  const filtersTabRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
+  const commonTabRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
+  const highlightTabRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
   const binaryTabRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
   const histogramTabRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
 
   const tabsRef: RefObject<HTMLDivElement>[] = [
-    filtersTabRef, binaryTabRef, histogramTabRef
+    commonTabRef, highlightTabRef, binaryTabRef, histogramTabRef
   ];
 
   function setFocusedTab(ref: RefObject<HTMLDivElement>): void {
@@ -240,6 +241,10 @@ export default function Home() {
 
     if (ref.current) {
       ref.current.classList.remove("hidden");
+
+      if (ref.current != histogramTabRef.current) {
+        ref.current.classList.add("flex");
+      }
     }
   };
 
@@ -317,12 +322,13 @@ export default function Home() {
 
       <div className="flex-1 flex-grow p-2 flex flex-col gap-2 items-center justify-center">
         <div className="flex gap-2">
-          <button onClick={() => setFocusedTab(filtersTabRef)} className="bg-slate-200 p-2">Filters</button>
+          <button onClick={() => setFocusedTab(commonTabRef)} className="bg-slate-200 p-2">Common</button>
+          <button onClick={() => setFocusedTab(highlightTabRef)} className="bg-slate-200 p-2">Highlight</button>
           <button onClick={() => setFocusedTab(binaryTabRef)} className="bg-slate-200 p-2">Binary</button>
           <button onClick={() => setFocusedTab(histogramTabRef)} className="bg-slate-200 p-2">Histogram</button>
         </div>
 
-        <div ref={filtersTabRef} className="flex flex-col gap-2">
+        <div ref={commonTabRef} className="flex flex-col gap-2">
           <div className="flex flex-col">
             <input type="number" id="cropImageWidthInput" placeholder="width" className="border w-full" />
             <input type="number" id="cropImageHeightInput" placeholder="height" className="border w-full" />
@@ -344,7 +350,9 @@ export default function Home() {
 
           <CustomSlider text="Linear Blending" ref={linearSliderRef} onClick={onLinearBlendingFilterClick} min={0} max={100} defaultValue={50} step={1}
             renderAditionalText={(value: number): string => { return ` ${value}%` }} />
+        </div>
 
+        <div ref={highlightTabRef} className="flex-col gap-2 hidden">
           <CustomSlider text="Blur" ref={blurSliderRef} onClick={onBlurFilterClick} min={1} max={5} defaultValue={1} step={1}
             renderAditionalText={(value: number): string => { return ` ${value} X ${value}` }} />
           <CustomSlider text="Maximum" ref={maximumSliderRef} onClick={onMaximumFilterClick} min={1} max={5} defaultValue={1} step={1}
@@ -353,7 +361,7 @@ export default function Home() {
             renderAditionalText={(value: number): string => { return ` ${value} X ${value}` }} />
         </div>
 
-        <div ref={binaryTabRef} className="flex flex-col gap-2 hidden">
+        <div ref={binaryTabRef} className="flex-col gap-2 hidden">
           <CustomButton text="AND" onClick={onBinaryAndFilterClick} />
           <CustomButton text="OR" onClick={onBinaryOrFilterClick} />
           <CustomButton text="NOT" onClick={onBinaryNotFilterClick} />
