@@ -5,6 +5,9 @@ import { RgbImage } from "@/classes/RgbImage";
 import RgbImageCanvasDrawer from "@/classes/RgbImageCanvasDrawer";
 import AddImageFilter from "@/classes/filters/AddImageFilter";
 import BinaryAndFilter from "@/classes/filters/BinaryAndFilter";
+import BinaryNotFilter from "@/classes/filters/BinaryNotFilter";
+import BinaryOrFilter from "@/classes/filters/BinaryOrFilter";
+import BinaryXorFilter from "@/classes/filters/BinaryXorFilter";
 import BlurFilter from "@/classes/filters/BlurFilter";
 import BrightnessFilter from "@/classes/filters/BrightnessFilter";
 import ConcatImageFilter from "@/classes/filters/ConcatImageFilter";
@@ -186,6 +189,24 @@ export default function Home() {
     });
   }
 
+  function onBinaryOrFilterClick(): void {
+    filterApplier.applyBinaryFilterToBothImages((firstImage: BinaryImage, secondImage: BinaryImage): BinaryImage => {
+      return new BinaryOrFilter().apply(firstImage, secondImage);
+    });
+  }
+
+  function onBinaryNotFilterClick(): void {
+    filterApplier.applyBinaryFilterToFirstImage((image: BinaryImage): BinaryImage => {
+      return new BinaryNotFilter().apply(image);
+    });
+  }
+
+  function onBinaryXorFilterClick(): void {
+    filterApplier.applyBinaryFilterToBothImages((firstImage: BinaryImage, secondImage: BinaryImage): BinaryImage => {
+      return new BinaryXorFilter().apply(firstImage, secondImage);
+    });
+  }
+
   const histogramChartRef: RefObject<HistogramChart> = useRef<HistogramChart>(null);
   function onUpdateHistogramClick(): void {
     histogramChartRef.current?.updateHistogram(filterApplier.firstUploadedImage);
@@ -332,8 +353,11 @@ export default function Home() {
             renderAditionalText={(value: number): string => { return ` ${value} X ${value}` }} />
         </div>
 
-        <div ref={binaryTabRef} className="gap-2 hidden">
+        <div ref={binaryTabRef} className="flex flex-col gap-2 hidden">
           <CustomButton text="AND" onClick={onBinaryAndFilterClick} />
+          <CustomButton text="OR" onClick={onBinaryOrFilterClick} />
+          <CustomButton text="NOT" onClick={onBinaryNotFilterClick} />
+          <CustomButton text="XOR" onClick={onBinaryXorFilterClick} />
         </div>
 
         <div ref={histogramTabRef} className="gap-2 w-full hidden">
