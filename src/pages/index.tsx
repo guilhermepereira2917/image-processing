@@ -413,7 +413,7 @@ export default function Home() {
 
           <div className="flex flex-column flex-wrap gap-2 mt-2">
             <CustomButton text="Set as First Image" onClick={onSetAsFirstImageClick} />
-            <CustomButton text="Sett as Second Image" onClick={onSetAsSecondImageClick} />
+            <CustomButton text="Set as Second Image" onClick={onSetAsSecondImageClick} />
             <CustomButton text="Download Image" onClick={onDownloadImageClick} />
           </div>
         </div>
