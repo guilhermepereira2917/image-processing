@@ -1,8 +1,9 @@
-import React, { Component, RefObject, createRef } from "react";
+import React, { Component, ReactNode, RefObject, createRef } from "react";
 import CustomButton, { CustomButtonProps } from "./CustomButton";
 import InputSlider, { InputSliderProps } from "./InputSlider";
 
 interface CustomSliderProps extends CustomButtonProps, InputSliderProps {
+  children?: ReactNode;
   renderAditionalText: (value: number) => string;
 }
 
@@ -24,6 +25,7 @@ export default class CustomSlider extends React.Component<CustomSliderProps, Cus
   render(): any {
     return (
       <div className="flex flex-col">
+        {this.props.children}
         <InputSlider ref={this.inputRef} min={this.props.min} max={this.props.max} defaultValue={this.props.defaultValue} step={this.props.step}
           onChange={() => this.updateAditionalText()} />
         <CustomButton {...this.props as CustomButtonProps} text={this.props.text + this.state.aditionalText} />

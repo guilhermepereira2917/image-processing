@@ -24,6 +24,7 @@ import NegativeFilter from "@/classes/filters/NegativeFilter";
 import OrderFilter from "@/classes/filters/OrderFilter";
 import TresholdFilter from "@/classes/filters/TresholdFilter";
 import CustomButton from "@/components/CustomButton";
+import CustomInputNumber from "@/components/CustomInputNumber";
 import CustomSlider from "@/components/CustomSlider";
 import HistogramChart from "@/components/HistogramChart";
 import React, { RefObject, useRef } from "react";
@@ -99,11 +100,13 @@ export default function Home() {
     rgbImageCanvasDrawer.draw(convertedImage, canvas);
   }
 
+  const cropImageWidthInputRef: RefObject<CustomInputNumber> = useRef(null);
+  const cropImageHeightInputRef: RefObject<CustomInputNumber> = useRef(null);
   function onCropImageClick(): void {
     return filterApplier.applyFilterToFirstImage((image: RgbImage) => {
-      const width: number = (document.getElementById('cropImageWidthInput') as HTMLInputElement).value as unknown as number;
-      const height: number = (document.getElementById('cropImageHeightInput') as HTMLInputElement).value as unknown as number;
-
+      const width: number = cropImageWidthInputRef.current?.getValue() || image.width();
+      const height: number = cropImageHeightInputRef.current?.getValue() || image.height();
+      
       return new CropImageFilter().crop(image, 0, 0, width, height);
     });
   }
@@ -351,8 +354,8 @@ export default function Home() {
 
         <div ref={commonTabRef} className="flex flex-col gap-2">
           <div className="flex flex-col">
-            <input type="number" id="cropImageWidthInput" placeholder="width" className="border w-full" />
-            <input type="number" id="cropImageHeightInput" placeholder="height" className="border w-full" />
+            <CustomInputNumber ref={cropImageWidthInputRef} placeholder="width" />
+            <CustomInputNumber ref={cropImageHeightInputRef} placeholder="height" />
             <CustomButton text="Crop " onClick={onCropImageClick} codeSnippetClass={CropImageFilter} />
           </div>
 
@@ -384,7 +387,6 @@ export default function Home() {
             renderAditionalText={(value: number): string => { return ` ${calculateKernelWidth(value)} X ${calculateKernelWidth(value)}` }} />
           <CustomSlider text="Order" ref={orderSliderRef} onClick={onOrderSliderRefClick} min={1} max={3} defaultValue={1} step={1}
             renderAditionalText={(value: number): string => { return ` ${calculateKernelWidth(value)} X ${calculateKernelWidth(value)}` }} />
-
         </div>
 
         <div ref={binaryTabRef} className="flex-col gap-2 hidden">
