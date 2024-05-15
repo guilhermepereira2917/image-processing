@@ -299,9 +299,9 @@ export default function Home() {
   }
 
   return (
-    <main className="w-screen p-2 flex flex-wrap justify-center items-center">
+    <main className="w-full mt-4 p-2 flex flex-wrap justify-center items-center">
       <div className="flex-1 flex flex-col items-center justify-center">
-        <div className="p-2 outline outline-sky-500">
+        <div className="p-2 border border-sky-500 w-full">
           <div className="flex justify-between mt-2">
             <div className="flex flex-col flex-wrap">
               <label htmlFor="firstUploadedImage">Upload an image</label>
@@ -391,7 +391,7 @@ export default function Home() {
       </div>
 
       <div className="flex-1 flex items-center justify-center">
-        <div className="p-2 outline outline-sky-500">
+        <div className="p-2 border border-sky-500">
           <label>Converted image</label>
 
           <div className="flex justify-center items-center">
