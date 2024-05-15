@@ -11,7 +11,7 @@ export default class CustomInputNumber extends React.Component<CustomInputNumber
   render(): ReactNode {
     return (
       <input ref={this.inputRef} type="number" id="cropImageWidthInput"
-        placeholder={this.props.placeholder} className="border w-full" />
+        placeholder={this.props.placeholder} className="border border-gray-400 rounded p-1 w-full" />
     );
   }
 

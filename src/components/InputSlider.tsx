@@ -19,7 +19,7 @@ export default class InputSlider extends React.Component<InputSliderProps> {
         max={this.props.max}
         defaultValue={this.props.defaultValue}
         step={this.props.step}
-        onChange={this.doOnChange} />
+        onChange={() => { this.doOnChange() }} />
     );
   }
 

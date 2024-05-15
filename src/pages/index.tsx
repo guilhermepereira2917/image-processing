@@ -106,7 +106,7 @@ export default function Home() {
     return filterApplier.applyFilterToFirstImage((image: RgbImage) => {
       const width: number = cropImageWidthInputRef.current?.getValue() || image.getWidth();
       const height: number = cropImageHeightInputRef.current?.getValue() || image.getHeight();
-      
+
       return new CropImageFilter().crop(image, 0, 0, width, height);
     });
   }
@@ -199,11 +199,13 @@ export default function Home() {
   }
 
   const orderSliderRef: RefObject<CustomSlider> = useRef<CustomSlider>(null);
+  const orderIndexRef: RefObject<CustomInputNumber> = useRef<CustomInputNumber>(null);
   function onOrderSliderRefClick(): void {
     const kernelSize: number = orderSliderRef.current ? orderSliderRef.current.getValue() : 1;
+    const orderIndex: number = orderIndexRef.current ? orderIndexRef.current.getValue() : 1;
 
     filterApplier.applyFilterToFirstImage((image: RgbImage): RgbImage => {
-      return new OrderFilter().apply(image, kernelSize, 8);
+      return new OrderFilter().apply(image, kernelSize, orderIndex);
     });
   }
 
@@ -353,7 +355,7 @@ export default function Home() {
         </div>
 
         <div ref={commonTabRef} className="flex flex-col gap-2">
-          <div className="flex flex-col">
+          <div className="flex flex-col gap-1">
             <CustomInputNumber ref={cropImageWidthInputRef} placeholder="width" />
             <CustomInputNumber ref={cropImageHeightInputRef} placeholder="height" />
             <CustomButton text="Crop " onClick={onCropImageClick} codeSnippetClass={CropImageFilter} />
@@ -386,7 +388,9 @@ export default function Home() {
           <CustomSlider text="Median" ref={medianSliderRef} onClick={onMedianFilterClick} min={1} max={3} defaultValue={1} step={1}
             renderAditionalText={(value: number): string => { return ` ${calculateKernelWidth(value)} X ${calculateKernelWidth(value)}` }} />
           <CustomSlider text="Order" ref={orderSliderRef} onClick={onOrderSliderRefClick} min={1} max={3} defaultValue={1} step={1}
-            renderAditionalText={(value: number): string => { return ` ${calculateKernelWidth(value)} X ${calculateKernelWidth(value)}` }} />
+            renderAditionalText={(value: number): string => { return ` ${calculateKernelWidth(value)} X ${calculateKernelWidth(value)}` }} >
+            <CustomInputNumber ref={orderIndexRef} placeholder="order index" />
+          </CustomSlider>
         </div>
 
         <div ref={binaryTabRef} className="flex-col gap-2 hidden">
