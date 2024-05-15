@@ -13,8 +13,8 @@ export default class RgbImageCanvasDrawer {
       return;
     }
 
-    canvas.width = image.width();
-    canvas.height = image.height();
+    canvas.width = image.getWidth();
+    canvas.height = image.getHeight();
 
     const imageData: ImageData = context.createImageData(canvas.width, canvas.height);
 

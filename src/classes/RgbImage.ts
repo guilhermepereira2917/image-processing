@@ -39,7 +39,7 @@ export class RgbImage {
   pixels: RgbPixel[][] = [];
 
   getPixel(rowIndex: number, columnIndex: number): RgbPixel | undefined {
-    if (rowIndex < 0 || rowIndex >= this.height() || columnIndex < 0 || columnIndex >= this.width()) {
+    if (rowIndex < 0 || rowIndex >= this.getHeight() || columnIndex < 0 || columnIndex >= this.getWidth()) {
       return undefined;
     }
 
@@ -67,24 +67,24 @@ export class RgbImage {
       .filter((pixel: RgbPixel | undefined) => { return pixel != undefined }) as RgbPixel[];
   }
 
-  width(): number {
+  getWidth(): number {
     return this.pixels[0].length;
   }
 
-  height(): number {
+  getHeight(): number {
     return this.pixels.length;
   }
 
-  totalPixels(): number {
-    return this.width() * this.height();
+  getTotalPixels(): number {
+    return this.getWidth() * this.getHeight();
   }
 
   clone(): RgbImage {
     const clonedImage: RgbImage = new RgbImage();
 
-    for (let y = 0; y < this.height(); y++) {
+    for (let y = 0; y < this.getHeight(); y++) {
       const row: RgbPixel[] = [];
-      for (let x = 0; x < this.width(); x++) {
+      for (let x = 0; x < this.getWidth(); x++) {
         const pixel = this.pixels[y][x];
         row.push(pixel.clone());
       }

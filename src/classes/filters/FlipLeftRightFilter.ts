@@ -6,7 +6,7 @@ export default class FlipLeftRightFilter {
 
     clonedImage.pixels.forEach((row: RgbPixel[], rowIndex: number) => {
       row.forEach((pixel: RgbPixel, columnIndex: number) => {
-        const otherPixel = image.pixels[rowIndex][image.width() - columnIndex - 1];
+        const otherPixel = image.pixels[rowIndex][image.getWidth() - columnIndex - 1];
 
         pixel.red = otherPixel.red;
         pixel.green = otherPixel.green;

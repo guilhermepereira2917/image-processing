@@ -104,8 +104,8 @@ export default function Home() {
   const cropImageHeightInputRef: RefObject<CustomInputNumber> = useRef(null);
   function onCropImageClick(): void {
     return filterApplier.applyFilterToFirstImage((image: RgbImage) => {
-      const width: number = cropImageWidthInputRef.current?.getValue() || image.width();
-      const height: number = cropImageHeightInputRef.current?.getValue() || image.height();
+      const width: number = cropImageWidthInputRef.current?.getValue() || image.getWidth();
+      const height: number = cropImageHeightInputRef.current?.getValue() || image.getHeight();
       
       return new CropImageFilter().crop(image, 0, 0, width, height);
     });

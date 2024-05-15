@@ -4,8 +4,8 @@ export default class ResizeFilter {
   resize(image: RgbImage, width: number, height: number): RgbImage {
     const resizedImage: RgbImage = new RgbImage();
 
-    let scaleX = image.width() / width;
-    let scaleY = image.height() / height;
+    let scaleX = image.getWidth() / width;
+    let scaleY = image.getHeight() / height;
 
     for (let y = 0; y < height; y++) {
       const row: RgbPixel[] = [];

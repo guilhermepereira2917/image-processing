@@ -14,7 +14,7 @@ export default class EqualizeHistogramFilter {
       }
 
       for (let i = 0; i < cdf.length; i++) {
-        cdf[i] = cdf[i] / image.totalPixels() * 255;
+        cdf[i] = cdf[i] / image.getTotalPixels() * 255;
       }
 
       return cdf;

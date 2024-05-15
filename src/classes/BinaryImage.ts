@@ -2,7 +2,7 @@ class BinaryImage {
   pixels: BinaryPixel[][] = [];
 
   getPixel(rowIndex: number, columnIndex: number): BinaryPixel | undefined {
-    if (rowIndex < 0 || rowIndex >= this.height() || columnIndex < 0 || columnIndex >= this.width()) {
+    if (rowIndex < 0 || rowIndex >= this.getHeight() || columnIndex < 0 || columnIndex >= this.getWidth()) {
       return undefined;
     }
 
@@ -12,9 +12,9 @@ class BinaryImage {
   clone(): BinaryImage {
     const clonedImage: BinaryImage = new BinaryImage();
 
-    for (let y = 0; y < this.height(); y++) {
+    for (let y = 0; y < this.getHeight(); y++) {
       const row: BinaryPixel[] = [];
-      for (let x = 0; x < this.width(); x++) {
+      for (let x = 0; x < this.getWidth(); x++) {
         const pixel = this.pixels[y][x];
         row.push(pixel.clone());
       }
@@ -24,11 +24,11 @@ class BinaryImage {
     return clonedImage;
   }
 
-  width(): number {
+  getWidth(): number {
     return this.pixels[0].length;
   }
 
-  height(): number {
+  getHeight(): number {
     return this.pixels.length;
   }
 }
