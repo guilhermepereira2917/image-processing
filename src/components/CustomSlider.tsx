@@ -1,12 +1,8 @@
-import React, { RefObject, createRef, useEffect, useRef } from "react";
+import React, { Component, RefObject, createRef } from "react";
 import CustomButton, { CustomButtonProps } from "./CustomButton";
+import InputSlider, { InputSliderProps } from "./InputSlider";
 
-interface CustomSliderProps extends CustomButtonProps {
-  min: number;
-  max: number;
-  defaultValue: number;
-  step: number;
-
+interface CustomSliderProps extends CustomButtonProps, InputSliderProps {
   renderAditionalText: (value: number) => string;
 }
 
@@ -15,7 +11,7 @@ interface CustomSliderState {
 }
 
 export default class CustomSlider extends React.Component<CustomSliderProps, CustomSliderState> {
-  inputRef: RefObject<HTMLInputElement> | null = createRef();
+  inputRef: RefObject<InputSlider> = createRef();
 
   constructor(props: CustomSliderProps) {
     super(props);
@@ -28,7 +24,7 @@ export default class CustomSlider extends React.Component<CustomSliderProps, Cus
   render(): any {
     return (
       <div className="flex flex-col">
-        <input ref={this.inputRef} type="range" min={this.props.min} max={this.props.max} defaultValue={this.props.defaultValue} step={this.props.step}
+        <InputSlider ref={this.inputRef} min={this.props.min} max={this.props.max} defaultValue={this.props.defaultValue} step={this.props.step}
           onChange={() => this.updateAditionalText()} />
         <CustomButton {...this.props as CustomButtonProps} text={this.props.text + this.state.aditionalText} />
       </div>
@@ -36,18 +32,12 @@ export default class CustomSlider extends React.Component<CustomSliderProps, Cus
   }
 
   getValue(): number {
-    const inputRefValue: number | undefined = this.inputRef?.current?.valueAsNumber;
-
-    if (inputRefValue == 0) {
-      return 0;
-    }
-
-    if (!inputRefValue) {
+    if (!this.inputRef.current) {
       return this.props.defaultValue;
     }
 
-    return inputRefValue;
-  }
+    return this.inputRef.current?.getValue();
+  };
 
   updateAditionalText(): void {
     this.setState({
