@@ -49,10 +49,10 @@ export class RgbImage {
   getPixelRange(rowIndex: number, columnIndex: number, range: number): (RgbPixel | undefined)[][] {
     const pixelRange: (RgbPixel | undefined)[][] = [];
 
-    for (let row = rowIndex - range; row <= rowIndex + range; row++) {
+    for (let row: number = rowIndex - range; row <= rowIndex + range; row++) {
       const pixelRangeRow: (RgbPixel | undefined)[] = [];
 
-      for (let column = columnIndex - range; column <= columnIndex + range; column++) {
+      for (let column: number = columnIndex - range; column <= columnIndex + range; column++) {
         pixelRangeRow.push(this.getPixel(row, column));
       }
 
@@ -60,6 +60,11 @@ export class RgbImage {
     }
 
     return pixelRange;
+  }
+
+  getPixelRangeWithinImageBounds(rowIndex: number, columnIndex: number, range: number): RgbPixel[] {
+    return this.getPixelRange(rowIndex, columnIndex, range).flat()
+      .filter((pixel: RgbPixel | undefined) => { return pixel != undefined }) as RgbPixel[];
   }
 
   width(): number {

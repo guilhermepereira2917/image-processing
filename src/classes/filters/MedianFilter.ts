@@ -1,4 +1,5 @@
 import { RgbImage, RgbPixel } from "../RgbImage";
+import sortRgbPixels from "../RgbPixelSorter";
 
 export default class MedianFilter {
   apply(image: RgbImage, range: number): RgbImage {
@@ -6,9 +7,7 @@ export default class MedianFilter {
 
     resultImage.pixels.forEach((row: RgbPixel[], rowIndex: number) => {
       row.forEach((pixel: RgbPixel, columnIndex: number) => {
-        const pixels: RgbPixel[] = image.getPixelRange(rowIndex, columnIndex, range).flat()
-          .filter((pixel: RgbPixel | undefined) => { return pixel != undefined }) as RgbPixel[];
-
+        const pixels: RgbPixel[] = image.getPixelRangeWithinImageBounds(rowIndex, columnIndex, range);
         const medianPixel: RgbPixel = this.getMedianPixel(pixels);
 
         pixel.red = medianPixel.red;
@@ -21,7 +20,7 @@ export default class MedianFilter {
   }
 
   getMedianPixel(pixels: RgbPixel[]): RgbPixel {
-    this.sortPixels(pixels);
+    sortRgbPixels(pixels);
 
     const half = Math.floor(pixels.length / 2);
 
@@ -37,20 +36,5 @@ export default class MedianFilter {
     const blueMedian: number = (firstMedianPixel.blue + secondMedianPixel.blue) / 2;
 
     return new RgbPixel(redMedian, greenMedian, blueMedian);
-  }
-
-  sortPixels(pixels: RgbPixel[]): void {
-    pixels.sort((firstPixel: RgbPixel, secondPixel: RgbPixel): number => {
-      const firstPixelSum: number = firstPixel.red + firstPixel.green + firstPixel.blue;
-      const secondPixelSum: number = secondPixel.red + secondPixel.green + secondPixel.blue;
-
-      if (firstPixelSum < secondPixelSum) {
-        return -1;
-      } else if (firstPixelSum == secondPixelSum) {
-        return 0;
-      } else {
-        return 1;
-      }
-    });
   }
 }

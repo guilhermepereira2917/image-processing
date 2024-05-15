@@ -1,6 +1,7 @@
 import { BinaryImage } from "@/classes/BinaryImage";
 import FileToRgbImageConverter from "@/classes/FileToRgbImageConverter";
 import FilterApplier from "@/classes/FilterApplier";
+import { calculateKernelWidth } from "@/classes/KernelCalculator";
 import { RgbImage } from "@/classes/RgbImage";
 import RgbImageCanvasDrawer from "@/classes/RgbImageCanvasDrawer";
 import AddImageFilter from "@/classes/filters/AddImageFilter";
@@ -20,6 +21,7 @@ import MaximumFilter from "@/classes/filters/MaximumFilter";
 import MedianFilter from "@/classes/filters/MedianFilter";
 import MinimumFilter from "@/classes/filters/MinimumFilter";
 import NegativeFilter from "@/classes/filters/NegativeFilter";
+import OrderFilter from "@/classes/filters/OrderFilter";
 import TresholdFilter from "@/classes/filters/TresholdFilter";
 import CustomButton from "@/components/CustomButton";
 import CustomSlider from "@/components/CustomSlider";
@@ -193,6 +195,15 @@ export default function Home() {
     });
   }
 
+  const orderSliderRef: RefObject<CustomSlider> = useRef<CustomSlider>(null);
+  function onOrderSliderRefClick(): void {
+    const kernelSize: number = orderSliderRef.current ? orderSliderRef.current.getValue() : 1;
+
+    filterApplier.applyFilterToFirstImage((image: RgbImage): RgbImage => {
+      return new OrderFilter().apply(image, kernelSize, 8);
+    });
+  }
+
   function onBinaryAndFilterClick(): void {
     filterApplier.applyBinaryFilterToBothImages((firstImage: BinaryImage, secondImage: BinaryImage): BinaryImage => {
       return new BinaryAndFilter().apply(firstImage, secondImage);
@@ -363,14 +374,16 @@ export default function Home() {
         </div>
 
         <div ref={highlightTabRef} className="flex-col gap-2 hidden">
-          <CustomSlider text="Blur" ref={blurSliderRef} onClick={onBlurFilterClick} min={1} max={5} defaultValue={1} step={1}
-            renderAditionalText={(value: number): string => { return ` ${value} X ${value}` }} />
-          <CustomSlider text="Maximum" ref={maximumSliderRef} onClick={onMaximumFilterClick} min={1} max={5} defaultValue={1} step={1}
-            renderAditionalText={(value: number): string => { return ` ${value} X ${value}` }} />
-          <CustomSlider text="Minimum" ref={minimumSliderRef} onClick={onMinimunFilterClick} min={1} max={5} defaultValue={1} step={1}
-            renderAditionalText={(value: number): string => { return ` ${value} X ${value}` }} />
-          <CustomSlider text="Median" ref={medianSliderRef} onClick={onMedianFilterClick} min={1} max={5} defaultValue={1} step={1}
-            renderAditionalText={(value: number): string => { return ` ${value} X ${value}` }} />
+          <CustomSlider text="Blur" ref={blurSliderRef} onClick={onBlurFilterClick} min={1} max={3} defaultValue={1} step={1}
+            renderAditionalText={(value: number): string => { return ` ${calculateKernelWidth(value)} X ${calculateKernelWidth(value)}` }} />
+          <CustomSlider text="Maximum" ref={maximumSliderRef} onClick={onMaximumFilterClick} min={1} max={3} defaultValue={1} step={1}
+            renderAditionalText={(value: number): string => { return ` ${calculateKernelWidth(value)} X ${calculateKernelWidth(value)}` }} />
+          <CustomSlider text="Minimum" ref={minimumSliderRef} onClick={onMinimunFilterClick} min={1} max={3} defaultValue={1} step={1}
+            renderAditionalText={(value: number): string => { return ` ${calculateKernelWidth(value)} X ${calculateKernelWidth(value)}` }} />
+          <CustomSlider text="Median" ref={medianSliderRef} onClick={onMedianFilterClick} min={1} max={3} defaultValue={1} step={1}
+            renderAditionalText={(value: number): string => { return ` ${calculateKernelWidth(value)} X ${calculateKernelWidth(value)}` }} />
+          <CustomSlider text="Order" ref={orderSliderRef} onClick={onOrderSliderRefClick} min={1} max={3} defaultValue={1} step={1}
+            renderAditionalText={(value: number): string => { return ` ${calculateKernelWidth(value)} X ${calculateKernelWidth(value)}` }} />
 
         </div>
 
