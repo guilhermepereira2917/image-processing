@@ -2,16 +2,16 @@ import { RgbImage, RgbPixel } from "../RgbImage";
 
 export default class BlurFilter {
   blur(image: RgbImage, range: number): RgbImage {
-    const bluredImage: RgbImage = image.clone();
+    const blurredImage: RgbImage = image.clone();
 
-    bluredImage.pixels.forEach((row: RgbPixel[], bluredImageRowIndex: number) => {
-      row.forEach((bluredImagePixel: RgbPixel, bluredImageColumnIndex: number) => {
+    blurredImage.pixels.forEach((row: RgbPixel[], blurredImageRowIndex: number) => {
+      row.forEach((blurredImagePixel: RgbPixel, blurredImageColumnIndex: number) => {
         let red: number = 0;
         let green: number = 0;
         let blue: number = 0;
         let pixelCount: number = 0;
 
-        image.getPixelRange(bluredImageRowIndex, bluredImageColumnIndex, range).forEach((imageRow: (RgbPixel | undefined)[]) => {
+        image.getPixelRange(blurredImageRowIndex, blurredImageColumnIndex, range).forEach((imageRow: (RgbPixel | undefined)[]) => {
           imageRow.forEach((pixel: RgbPixel | undefined) => {
             if (!pixel) {
               return;
@@ -25,12 +25,12 @@ export default class BlurFilter {
           });
         });
 
-        bluredImagePixel.red = red / pixelCount;
-        bluredImagePixel.green = green / pixelCount;
-        bluredImagePixel.blue = blue / pixelCount;
+        blurredImagePixel.red = red / pixelCount;
+        blurredImagePixel.green = green / pixelCount;
+        blurredImagePixel.blue = blue / pixelCount;
       });
     });
 
-    return bluredImage;
+    return blurredImage;
   }
 }

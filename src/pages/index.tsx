@@ -17,6 +17,7 @@ import FlipLeftRightFilter from "@/classes/filters/FlipLeftRightFilter";
 import FlipTopDownFilter from "@/classes/filters/FlipTopDownFilter";
 import LinearBlendingFilter from "@/classes/filters/LinearBlendingFilter";
 import MaximumFilter from "@/classes/filters/MaximumFilter";
+import MedianFilter from "@/classes/filters/MedianFilter";
 import MinimumFilter from "@/classes/filters/MinimumFilter";
 import NegativeFilter from "@/classes/filters/NegativeFilter";
 import TresholdFilter from "@/classes/filters/TresholdFilter";
@@ -180,6 +181,15 @@ export default function Home() {
 
     filterApplier.applyFilterToFirstImage((image: RgbImage): RgbImage => {
       return new MinimumFilter().apply(image, kernelSize);
+    });
+  }
+
+  const medianSliderRef: RefObject<CustomSlider> = useRef<CustomSlider>(null);
+  function onMedianFilterClick(): void {
+    const kernelSize: number = medianSliderRef.current ? medianSliderRef.current.getValue() : 1;
+
+    filterApplier.applyFilterToFirstImage((image: RgbImage): RgbImage => {
+      return new MedianFilter().apply(image, kernelSize);
     });
   }
 
@@ -359,6 +369,9 @@ export default function Home() {
             renderAditionalText={(value: number): string => { return ` ${value} X ${value}` }} />
           <CustomSlider text="Minimum" ref={minimumSliderRef} onClick={onMinimunFilterClick} min={1} max={5} defaultValue={1} step={1}
             renderAditionalText={(value: number): string => { return ` ${value} X ${value}` }} />
+          <CustomSlider text="Median" ref={medianSliderRef} onClick={onMedianFilterClick} min={1} max={5} defaultValue={1} step={1}
+            renderAditionalText={(value: number): string => { return ` ${value} X ${value}` }} />
+
         </div>
 
         <div ref={binaryTabRef} className="flex-col gap-2 hidden">
