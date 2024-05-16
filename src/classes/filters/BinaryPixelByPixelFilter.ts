@@ -1,7 +1,6 @@
 import { BinaryImage, BinaryPixel, BinaryPixelValueEnum } from "../BinaryImage";
-import { RgbImage, RgbPixel } from "../RgbImage";
 
-export default class PixelByPixelFilter {
+export default class BinaryPixelByPixelFilter {
   applyToOneImage(image: BinaryImage, binaryOperation: (pixel: BinaryPixel) => BinaryPixelValueEnum): BinaryImage {
     image.pixels.forEach((row: BinaryPixel[]) => {
       row.forEach((pixel: BinaryPixel) => {
