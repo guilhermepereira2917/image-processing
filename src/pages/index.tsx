@@ -356,8 +356,8 @@ export default function Home() {
 
         <div ref={commonTabRef} className="flex flex-col gap-2">
           <div className="flex flex-col gap-1">
-            <CustomInputNumber ref={cropImageWidthInputRef} placeholder="width" />
-            <CustomInputNumber ref={cropImageHeightInputRef} placeholder="height" />
+            <CustomInputNumber ref={cropImageWidthInputRef} placeholder="width" min={1} max={256} />
+            <CustomInputNumber ref={cropImageHeightInputRef} placeholder="height" min={1} max={256} />
             <CustomButton text="Crop " onClick={onCropImageClick} codeSnippetClass={CropImageFilter} />
           </div>
 
@@ -389,7 +389,7 @@ export default function Home() {
             renderAditionalText={(value: number): string => { return ` ${calculateKernelWidth(value)} X ${calculateKernelWidth(value)}` }} />
           <CustomSlider text="Order" ref={orderSliderRef} onClick={onOrderSliderRefClick} min={1} max={3} defaultValue={1} step={1}
             renderAditionalText={(value: number): string => { return ` ${calculateKernelWidth(value)} X ${calculateKernelWidth(value)}` }} >
-            <CustomInputNumber ref={orderIndexRef} placeholder="order index" />
+            <CustomInputNumber ref={orderIndexRef} placeholder="order index" min={1} max={49}/>
           </CustomSlider>
         </div>
 
