@@ -4,7 +4,7 @@ import FilterApplier from "@/classes/FilterApplier";
 import { calculateKernelWidth } from "@/classes/KernelCalculator";
 import { RgbImage } from "@/classes/RgbImage";
 import RgbImageCanvasDrawer from "@/classes/RgbImageCanvasDrawer";
-import AddImageFilter from "@/classes/filters/AddImagesFilter";
+import AddImagesFilter from "@/classes/filters/AddImagesFilter";
 import BinaryAndFilter from "@/classes/filters/BinaryAndFilter";
 import BinaryNotFilter from "@/classes/filters/BinaryNotFilter";
 import BinaryOrFilter from "@/classes/filters/BinaryOrFilter";
@@ -13,6 +13,7 @@ import BlurFilter from "@/classes/filters/BlurFilter";
 import BrightnessFilter from "@/classes/filters/BrightnessFilter";
 import ConcatImageFilter from "@/classes/filters/ConcatImageFilter";
 import CropImageFilter from "@/classes/filters/CropImageFilter";
+import DivideImagesFilter from "@/classes/filters/DivideImagesFilter";
 import EqualizeHistogramFilter from "@/classes/filters/EqualizeHistogramFilter";
 import FlipLeftRightFilter from "@/classes/filters/FlipLeftRightFilter";
 import FlipTopDownFilter from "@/classes/filters/FlipTopDownFilter";
@@ -20,8 +21,10 @@ import LinearBlendingFilter from "@/classes/filters/LinearBlendingFilter";
 import MaximumFilter from "@/classes/filters/MaximumFilter";
 import MedianFilter from "@/classes/filters/MedianFilter";
 import MinimumFilter from "@/classes/filters/MinimumFilter";
+import MultiplyImagesFilter from "@/classes/filters/MultiplyImagesFilter";
 import NegativeFilter from "@/classes/filters/NegativeFilter";
 import OrderFilter from "@/classes/filters/OrderFilter";
+import SubtractImagesFilter from "@/classes/filters/SubtractImagesFilter";
 import TresholdFilter from "@/classes/filters/TresholdFilter";
 import CustomButton from "@/components/CustomButton";
 import CustomInputNumber from "@/components/CustomInputNumber";
@@ -143,7 +146,25 @@ export default function Home() {
 
   function onAddImagesClick(): void {
     filterApplier.applyFilterToBothImages((firstImage: RgbImage, secondImage: RgbImage) => {
-      return new AddImageFilter().apply(firstImage, secondImage);
+      return new AddImagesFilter().apply(firstImage, secondImage);
+    });
+  }
+
+  function onSubtractImagesClick(): void {
+    filterApplier.applyFilterToBothImages((firstImage: RgbImage, secondImage: RgbImage) => {
+      return new SubtractImagesFilter().apply(firstImage, secondImage);
+    });
+  }
+
+  function onMultiplyImagesClick(): void {
+    filterApplier.applyFilterToBothImages((firstImage: RgbImage, secondImage: RgbImage) => {
+      return new MultiplyImagesFilter().apply(firstImage, secondImage);
+    });
+  }
+
+  function onDivideImagesClick(): void {
+    filterApplier.applyFilterToBothImages((firstImage: RgbImage, secondImage: RgbImage) => {
+      return new DivideImagesFilter().apply(firstImage, secondImage);
     });
   }
 
@@ -397,6 +418,9 @@ export default function Home() {
 
         <div ref={arithmeticTabRef} className="flex-col gap-2 hidden">
           <CustomButton text="Add" onClick={onAddImagesClick} />
+          <CustomButton text="Subtract" onClick={onSubtractImagesClick} />
+          <CustomButton text="Multiply" onClick={onMultiplyImagesClick} />
+          <CustomButton text="Divide" onClick={onDivideImagesClick} />
         </div>
 
         <div ref={binaryTabRef} className="flex-col gap-2 hidden">
