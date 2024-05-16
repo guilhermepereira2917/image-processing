@@ -1,19 +1,16 @@
 import { RgbImage, RgbPixel } from "../RgbImage";
+import PixelByPixelFilter from "./BinaryPixelByPixelFilter";
+import RgbPixelByPixelFilter from "./RgbPixelByPixelFilter";
 
 export default class AddImageFilter {
   apply(firstImage: RgbImage, secondImage: RgbImage): RgbImage {
-    const resultImage: RgbImage = firstImage.clone();
+    const addImagesFunction = (firstPixel: RgbPixel, secondPixel: RgbPixel): void => {
+      firstPixel.red = (firstPixel.red + secondPixel.red) / 2;
+      firstPixel.green = (firstPixel.green + secondPixel.green) / 2;
+      firstPixel.blue = (secondPixel.blue + secondPixel.blue) / 2;
+    }
 
-    resultImage.pixels.forEach((row: RgbPixel[], rowIndex: number) => {
-      row.forEach((pixel: RgbPixel, columnIndex: number) => {
-        const otherPixel = secondImage.pixels[rowIndex][columnIndex];
 
-        pixel.red = (pixel.red + otherPixel.red) / 2;
-        pixel.green = (pixel.green + otherPixel.green) / 2;
-        pixel.blue = (pixel.blue + otherPixel.blue) / 2;
-      });
-    });
-
-    return resultImage;
+    return new RgbPixelByPixelFilter().applyToTwoImages(firstImage, secondImage, addImagesFunction);
   }
 }

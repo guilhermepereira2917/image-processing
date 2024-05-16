@@ -1,5 +1,5 @@
 import { BinaryImage, BinaryPixel, BinaryPixelValueEnum } from "../BinaryImage";
-import BinaryFilter from "./BinaryFilter";
+import PixelByPixelFilter from "./BinaryPixelByPixelFilter";
 
 export default class BinaryNotFilter {
   apply(image: BinaryImage): BinaryImage {
@@ -11,6 +11,6 @@ export default class BinaryNotFilter {
       return BinaryPixelValueEnum.black;
     }
 
-    return new BinaryFilter().applyToOneImage(image, binaryNotFilter);
+    return new PixelByPixelFilter().applyToOneImage(image, binaryNotFilter);
   }
 }
