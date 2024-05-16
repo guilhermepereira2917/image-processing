@@ -5,6 +5,10 @@ import { calculateKernelWidth } from "@/classes/KernelCalculator";
 import { RgbImage } from "@/classes/RgbImage";
 import RgbImageCanvasDrawer from "@/classes/RgbImageCanvasDrawer";
 import AddImagesFilter from "@/classes/filters/AddImagesFilter";
+import ArithmeticAddFilter from "@/classes/filters/ArithmeticAddFilter";
+import ArithmeticDivideFilter from "@/classes/filters/ArithmeticDivideFilter";
+import ArithmeticMultiplyFilter from "@/classes/filters/ArithmeticMultiplyFilter";
+import ArithmeticSubtractFilter from "@/classes/filters/ArithmeticSubtractFilter";
 import BinaryAndFilter from "@/classes/filters/BinaryAndFilter";
 import BinaryNotFilter from "@/classes/filters/BinaryNotFilter";
 import BinaryOrFilter from "@/classes/filters/BinaryOrFilter";
@@ -165,6 +169,42 @@ export default function Home() {
   function onDivideImagesClick(): void {
     filterApplier.applyFilterToBothImages((firstImage: RgbImage, secondImage: RgbImage) => {
       return new DivideImagesFilter().apply(firstImage, secondImage);
+    });
+  }
+
+  const addImageInputRef: RefObject<CustomInputNumber> = useRef<CustomInputNumber>(null);
+  function onArithmeticAddImageClick(): void {
+    filterApplier.applyFilterToFirstImage((image: RgbImage): RgbImage => {
+      const value: number = addImageInputRef.current?.getValue() || 0;
+
+      return new ArithmeticAddFilter().apply(image, value);
+    });
+  }
+
+  const subtractImageInputRef: RefObject<CustomInputNumber> = useRef<CustomInputNumber>(null);
+  function onArithmeticSubtractImageClick(): void {
+    filterApplier.applyFilterToFirstImage((image: RgbImage): RgbImage => {
+      const value: number = subtractImageInputRef.current?.getValue() || 0;
+
+      return new ArithmeticSubtractFilter().apply(image, value);
+    });
+  }
+
+  const multiplyImageInputRef: RefObject<CustomInputNumber> = useRef<CustomInputNumber>(null);
+  function onArithmeticMultiplyImageClick(): void {
+    filterApplier.applyFilterToFirstImage((image: RgbImage): RgbImage => {
+      const value: number = multiplyImageInputRef.current?.getValue() || 1;
+
+      return new ArithmeticMultiplyFilter().apply(image, value);
+    });
+  }
+
+  const divideImageInputRef: RefObject<CustomInputNumber> = useRef<CustomInputNumber>(null);
+  function onArithmeticDivideImageClick(): void {
+    filterApplier.applyFilterToFirstImage((image: RgbImage): RgbImage => {
+      const value: number = divideImageInputRef.current?.getValue() || 1;
+
+      return new ArithmeticDivideFilter().apply(image, value);
     });
   }
 
@@ -421,6 +461,23 @@ export default function Home() {
           <CustomButton text="Subtract" onClick={onSubtractImagesClick} />
           <CustomButton text="Multiply" onClick={onMultiplyImagesClick} />
           <CustomButton text="Divide" onClick={onDivideImagesClick} />
+
+          <div className="flex flex-col gap-1">
+            <CustomInputNumber ref={addImageInputRef} placeholder="value" min={1} max={256} />
+            <CustomButton text="Add" onClick={onArithmeticAddImageClick} />
+          </div>
+          <div className="flex flex-col gap-1">
+            <CustomInputNumber ref={subtractImageInputRef} placeholder="value" min={1} max={256} />
+            <CustomButton text="Subtract" onClick={onArithmeticSubtractImageClick} />
+          </div>
+          <div className="flex flex-col gap-1">
+            <CustomInputNumber ref={multiplyImageInputRef} placeholder="value" min={1} max={256} />
+            <CustomButton text="Multiply" onClick={onArithmeticMultiplyImageClick} />
+          </div>
+          <div className="flex flex-col gap-1">
+            <CustomInputNumber ref={divideImageInputRef} placeholder="value" min={1} max={256} />
+            <CustomButton text="Divide" onClick={onArithmeticDivideImageClick} />
+          </div>
         </div>
 
         <div ref={binaryTabRef} className="flex-col gap-2 hidden">
