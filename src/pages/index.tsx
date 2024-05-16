@@ -4,7 +4,7 @@ import FilterApplier from "@/classes/FilterApplier";
 import { calculateKernelWidth } from "@/classes/KernelCalculator";
 import { RgbImage } from "@/classes/RgbImage";
 import RgbImageCanvasDrawer from "@/classes/RgbImageCanvasDrawer";
-import AddImageFilter from "@/classes/filters/AddImageFilter";
+import AddImageFilter from "@/classes/filters/AddImagesFilter";
 import BinaryAndFilter from "@/classes/filters/BinaryAndFilter";
 import BinaryNotFilter from "@/classes/filters/BinaryNotFilter";
 import BinaryOrFilter from "@/classes/filters/BinaryOrFilter";
@@ -251,11 +251,12 @@ export default function Home() {
 
   const commonTabRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
   const highlightTabRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
+  const arithmeticTabRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
   const binaryTabRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
   const histogramTabRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
 
   const tabsRef: RefObject<HTMLDivElement>[] = [
-    commonTabRef, highlightTabRef, binaryTabRef, histogramTabRef
+    commonTabRef, highlightTabRef, arithmeticTabRef, binaryTabRef, histogramTabRef
   ];
 
   function setFocusedTab(ref: RefObject<HTMLDivElement>): void {
@@ -350,6 +351,7 @@ export default function Home() {
         <div className="flex gap-2">
           <button onClick={() => setFocusedTab(commonTabRef)} className="bg-slate-200 p-2">Common</button>
           <button onClick={() => setFocusedTab(highlightTabRef)} className="bg-slate-200 p-2">Highlight</button>
+          <button onClick={() => setFocusedTab(arithmeticTabRef)} className="bg-slate-200 p-2">Arithmetic</button>
           <button onClick={() => setFocusedTab(binaryTabRef)} className="bg-slate-200 p-2">Binary</button>
           <button onClick={() => setFocusedTab(histogramTabRef)} className="bg-slate-200 p-2">Histogram</button>
         </div>
@@ -371,7 +373,6 @@ export default function Home() {
 
           <CustomButton text="Flip Left-Right" onClick={onFlipLeftRightClick} />
           <CustomButton text="Flip Top-Down" onClick={onFlipTopDownClick} />
-          <CustomButton text="Add" onClick={onAddImagesClick} />
           <CustomButton text="Concat" onClick={onConcatImagesClick} />
 
           <CustomSlider text="Linear Blending" ref={linearSliderRef} onClick={onLinearBlendingFilterClick} min={0} max={100} defaultValue={50} step={1}
@@ -389,8 +390,13 @@ export default function Home() {
             renderAditionalText={(value: number): string => { return ` ${calculateKernelWidth(value)} X ${calculateKernelWidth(value)}` }} />
           <CustomSlider text="Order" ref={orderSliderRef} onClick={onOrderSliderRefClick} min={1} max={3} defaultValue={1} step={1}
             renderAditionalText={(value: number): string => { return ` ${calculateKernelWidth(value)} X ${calculateKernelWidth(value)}` }} >
-            <CustomInputNumber ref={orderIndexRef} placeholder="order index" min={1} max={49}/>
+            <CustomInputNumber ref={orderIndexRef} placeholder="order index" min={1} max={49} />
           </CustomSlider>
+        </div>
+
+
+        <div ref={arithmeticTabRef} className="flex-col gap-2 hidden">
+          <CustomButton text="Add" onClick={onAddImagesClick} />
         </div>
 
         <div ref={binaryTabRef} className="flex-col gap-2 hidden">
