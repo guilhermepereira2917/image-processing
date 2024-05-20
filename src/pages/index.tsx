@@ -34,77 +34,23 @@ import CustomButton from "@/components/CustomButton";
 import CustomInputNumber from "@/components/CustomInputNumber";
 import CustomSlider from "@/components/CustomSlider";
 import HistogramChart from "@/components/HistogramChart";
+import RgbImageCanvas from "@/components/RgbImageCanvas";
 import React, { RefObject, useRef } from "react";
 
 export default function Home() {
+  const convertedRgbImageCanvasRef: RefObject<RgbImageCanvas> = useRef(null);
 
   const filterApplier = new FilterApplier();
   filterApplier.onFilterApply = (image: RgbImage) => {
-    drawConvertedImage(image);
+    convertedRgbImageCanvasRef.current?.draw(image);
   }
 
-  function getFirstUploadedImageCanvas(): HTMLCanvasElement {
-    return document.getElementById('firstUploadedImageCanvas') as HTMLCanvasElement;
-  }
-
-  function getSecondUploadedImageCanvas(): HTMLCanvasElement {
-    return document.getElementById('secondUploadedImageCanvas') as HTMLCanvasElement;
-  }
-
-  function getConvertedImageCanvas(): HTMLCanvasElement {
-    return document.getElementById('convertedImageCanvas') as HTMLCanvasElement;
-  }
-
-  function drawFirstUploadedImage(): void {
-    const canvas: HTMLCanvasElement = getFirstUploadedImageCanvas();
-    const rgbImageCanvasDrawer: RgbImageCanvasDrawer = new RgbImageCanvasDrawer();
-    rgbImageCanvasDrawer.draw(filterApplier.firstUploadedImage, canvas);
-  }
-
-  function drawSecondUploadedImage(): void {
-    const canvas: HTMLCanvasElement = getSecondUploadedImageCanvas();
-    const rgbImageCanvasDrawer: RgbImageCanvasDrawer = new RgbImageCanvasDrawer();
-    rgbImageCanvasDrawer.draw(filterApplier.secondUploadedImage, canvas);
-  }
-
-  function setFirstUploadedImage(image: RgbImage | null) {
+  function onFirstImageChange(image: RgbImage): void {
     filterApplier.firstUploadedImage = image;
-    drawFirstUploadedImage();
   }
 
-  function setSecondUploadedImage(image: RgbImage | null) {
+  function onSecondImageChange(image: RgbImage): void {
     filterApplier.secondUploadedImage = image;
-    drawSecondUploadedImage();
-  }
-
-  function onFirstImageChange(event: React.ChangeEvent<HTMLInputElement>): void {
-    if (!event.target.files || !event.target.files[0]) {
-      return;
-    }
-
-    const uploadedFile: File = event.target.files[0];
-    const fileToRgbImageConverter: FileToRgbImageConverter = new FileToRgbImageConverter();
-    fileToRgbImageConverter.convert(uploadedFile).then((value: RgbImage) => {
-      setFirstUploadedImage(value);
-    });
-  }
-
-  function onSecondImageChange(event: React.ChangeEvent<HTMLInputElement>): void {
-    if (!event.target.files || !event.target.files[0]) {
-      return;
-    }
-
-    const uploadedFile: File = event.target.files[0];
-    const fileToRgbImageConverter: FileToRgbImageConverter = new FileToRgbImageConverter();
-    fileToRgbImageConverter.convert(uploadedFile).then((value: RgbImage) => {
-      setSecondUploadedImage(value);
-    });
-  }
-
-  function drawConvertedImage(convertedImage: RgbImage) {
-    const canvas: HTMLCanvasElement = getConvertedImageCanvas();
-    const rgbImageCanvasDrawer: RgbImageCanvasDrawer = new RgbImageCanvasDrawer();
-    rgbImageCanvasDrawer.draw(convertedImage, canvas);
   }
 
   const cropImageWidthInputRef: RefObject<CustomInputNumber> = useRef(null);
@@ -336,28 +282,24 @@ export default function Home() {
     }
   };
 
-  function onClearFirstImageClick(): void {
-    setFirstUploadedImage(null);
-  }
-
-  function onClearSecondImageClick(): void {
-    setSecondUploadedImage(null);
-  }
-
+  const firstRgbImageCanvasRef: RefObject<RgbImageCanvas> = useRef(null);
   function onSetAsFirstImageClick(): void {
     if (!filterApplier.convertedImage) {
       return;
     }
 
-    setFirstUploadedImage(filterApplier.convertedImage.clone());
+    filterApplier.firstUploadedImage = filterApplier.convertedImage.clone();
+    firstRgbImageCanvasRef.current?.draw(filterApplier.firstUploadedImage);
   }
 
+  const secondRgbImageCanvasRef: RefObject<RgbImageCanvas> = useRef(null);
   function onSetAsSecondImageClick(): void {
     if (!filterApplier.convertedImage) {
       return;
     }
 
-    setSecondUploadedImage(filterApplier.convertedImage.clone());
+    filterApplier.secondUploadedImage = filterApplier.convertedImage.clone();
+    secondRgbImageCanvasRef.current?.draw(filterApplier.secondUploadedImage);
   }
 
   function onDownloadImageClick(): void {
@@ -365,7 +307,10 @@ export default function Home() {
       return;
     }
 
-    const dataUrl = getConvertedImageCanvas().toDataURL('image/png');
+    const dataUrl = convertedRgbImageCanvasRef.current?.toDataUrl('image/png');
+    if (!dataUrl) {
+      return;
+    }
 
     const link = document.createElement('a');
     link.href = dataUrl;
@@ -380,31 +325,11 @@ export default function Home() {
     <main className="w-full mt-4 p-2 flex flex-wrap justify-center items-center">
       <div className="flex-1 flex flex-col items-center justify-center">
         <div className="p-2 border border-sky-500 w-full">
-          <div className="flex justify-between mt-2">
-            <div className="flex flex-col flex-wrap">
-              <label htmlFor="firstUploadedImage">Upload an image</label>
-              <input type="file" name="firstUploadedImage" accept="image/png, image/jpeg" onChange={onFirstImageChange} />
-            </div>
+          <RgbImageCanvas allowUpload={true} text="Upload First Image"
+            ref={firstRgbImageCanvasRef} onImageChanged={onFirstImageChange} />
 
-            <CustomButton text="Clear" onClick={onClearFirstImageClick} />
-          </div>
-
-          <div className="flex justify-center items-center">
-            <canvas className="w-[256px] h-[256px] mt-2 outline outline-sky-500" id="firstUploadedImageCanvas" />
-          </div>
-
-          <div className="flex justify-between mt-2">
-            <div className="flex flex-col flex-wrap">
-              <label htmlFor="secondUploadedImage">Upload another image</label>
-              <input type="file" name="secondUploadedImage" accept="image/png, image/jpeg" onChange={onSecondImageChange} />
-            </div>
-
-            <CustomButton text="Clear" onClick={onClearSecondImageClick} />
-          </div>
-
-          <div className="flex justify-center items-center">
-            <canvas className="w-[256px] h-[256px] mt-2 outline outline-sky-500" id="secondUploadedImageCanvas" />
-          </div>
+          <RgbImageCanvas allowUpload={true} text="Upload Second Image"
+            ref={secondRgbImageCanvasRef} onImageChanged={onSecondImageChange} />
         </div>
       </div>
 
@@ -498,11 +423,7 @@ export default function Home() {
 
       <div className="flex-1 flex items-center justify-center">
         <div className="p-2 border border-sky-500">
-          <label>Converted image</label>
-
-          <div className="flex justify-center items-center">
-            <canvas className="w-[256px] h-[256px] mt-2 outline outline-sky-500" id="convertedImageCanvas" />
-          </div>
+          <RgbImageCanvas allowUpload={false} ref={convertedRgbImageCanvasRef} />
 
           <div className="flex flex-column flex-wrap gap-2 mt-2">
             <CustomButton text="Set as First Image" onClick={onSetAsFirstImageClick} />
