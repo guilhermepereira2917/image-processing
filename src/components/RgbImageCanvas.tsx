@@ -3,6 +3,7 @@ import CustomButton from "./CustomButton";
 import { RgbImage } from "@/classes/RgbImage";
 import FileToRgbImageConverter from "@/classes/FileToRgbImageConverter";
 import RgbImageCanvasDrawer from "@/classes/RgbImageCanvasDrawer";
+import { FaUpload } from "react-icons/fa";
 
 interface RgbImageCanvasProps {
   text?: string;
@@ -16,13 +17,18 @@ export default class RgbImageCanvas extends React.Component<RgbImageCanvasProps>
 
   render(): ReactNode {
     return (
-      <div className="flex flex-col gap-2 justify-center items-center">
-        <canvas ref={this.canvasRef} className="w-[256px] h-[256px] mt-2 outline outline-sky-500" />
-        {this.props.allowUpload && <>
-          <input ref={this.inputRef} type="file" accept="image/png, image/jpeg" className="hidden"
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.onFileUpload(event)} />
-          <CustomButton text={this.props.text || "Upload"} onClick={() => this.openFileUpload()} />
-        </>}
+      <div className="relative flex flex-col justify-center items-center">
+        <p className="text-left w-full block font-semibold">{this.props.text}</p>
+        <canvas ref={this.canvasRef}
+          className={"w-[320px] h-[320px] outline outline-sky-500 image-rendering-pixelated " +
+            (this.props.allowUpload ? "cursor-pointer" : "")}
+          onClick={() => {
+            if (this.props.allowUpload) {
+              this.openFileUpload()
+            }
+          }} />
+        <input ref={this.inputRef} type="file" accept="image/png, image/jpeg" className="hidden"
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.onFileUpload(event)} />
       </div>
     );
   }

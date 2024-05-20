@@ -322,18 +322,16 @@ export default function Home() {
   }
 
   return (
-    <main className="w-full mt-4 p-2 flex flex-wrap justify-center items-center">
-      <div className="flex-1 flex flex-col items-center justify-center">
-        <div className="p-2 border border-sky-500 w-full">
-          <RgbImageCanvas allowUpload={true} text="Upload First Image"
-            ref={firstRgbImageCanvasRef} onImageChanged={onFirstImageChange} />
+    <main className="w-full mt-4 p-2 flex flex-wrap items-center">
+      <div className="flex-1 flex flex-col justify-center items-center p-2">
+        <RgbImageCanvas allowUpload={true} text="Upload First Image"
+          ref={firstRgbImageCanvasRef} onImageChanged={onFirstImageChange} />
 
-          <RgbImageCanvas allowUpload={true} text="Upload Second Image"
-            ref={secondRgbImageCanvasRef} onImageChanged={onSecondImageChange} />
-        </div>
+        <RgbImageCanvas allowUpload={true} text="Upload Second Image"
+          ref={secondRgbImageCanvasRef} onImageChanged={onSecondImageChange} />
       </div>
 
-      <div className="flex-1 flex-grow p-2 flex flex-col gap-2 items-center justify-center">
+      <div className="flex-1 flex-grow p-2 flex flex-col gap-2 items-center justify-center self-start">
         <div className="flex gap-2">
           <button onClick={() => setFocusedTab(commonTabRef)} className="bg-slate-200 p-2">Common</button>
           <button onClick={() => setFocusedTab(highlightTabRef)} className="bg-slate-200 p-2">Highlight</button>
@@ -380,7 +378,6 @@ export default function Home() {
           </CustomSlider>
         </div>
 
-
         <div ref={arithmeticTabRef} className="flex-col gap-2 hidden">
           <CustomButton text="Add" onClick={onAddImagesClick} />
           <CustomButton text="Subtract" onClick={onSubtractImagesClick} />
@@ -421,16 +418,12 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="flex-1 flex items-center justify-center">
-        <div className="p-2 border border-sky-500">
-          <RgbImageCanvas allowUpload={false} ref={convertedRgbImageCanvasRef} />
+      <div className="flex-1 flex gap-2 flex-col items-center justify-center">
+        <RgbImageCanvas allowUpload={false} ref={convertedRgbImageCanvasRef} text="Converted Image"/>
 
-          <div className="flex flex-column flex-wrap gap-2 mt-2">
-            <CustomButton text="Set as First Image" onClick={onSetAsFirstImageClick} />
-            <CustomButton text="Set as Second Image" onClick={onSetAsSecondImageClick} />
-            <CustomButton text="Download Image" onClick={onDownloadImageClick} />
-          </div>
-        </div>
+        <CustomButton text="Set as First Image" onClick={onSetAsFirstImageClick} />
+        <CustomButton text="Set as Second Image" onClick={onSetAsSecondImageClick} />
+        <CustomButton text="Download Image" onClick={onDownloadImageClick} />
       </div>
     </main >
   );
