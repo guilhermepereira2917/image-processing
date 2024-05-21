@@ -1,9 +1,7 @@
 import { BinaryImage } from "@/classes/BinaryImage";
-import FileToRgbImageConverter from "@/classes/FileToRgbImageConverter";
 import FilterApplier from "@/classes/FilterApplier";
 import { calculateKernelWidth } from "@/classes/KernelCalculator";
 import { RgbImage } from "@/classes/RgbImage";
-import RgbImageCanvasDrawer from "@/classes/RgbImageCanvasDrawer";
 import AddImagesFilter from "@/classes/filters/AddImagesFilter";
 import ArithmeticAddFilter from "@/classes/filters/ArithmeticAddFilter";
 import ArithmeticDivideFilter from "@/classes/filters/ArithmeticDivideFilter";
@@ -28,6 +26,7 @@ import MinimumFilter from "@/classes/filters/MinimumFilter";
 import MultiplyImagesFilter from "@/classes/filters/MultiplyImagesFilter";
 import NegativeFilter from "@/classes/filters/NegativeFilter";
 import OrderFilter from "@/classes/filters/OrderFilter";
+import SmoothingFilter from "@/classes/filters/SmoothingFilter";
 import SubtractImagesFilter from "@/classes/filters/SubtractImagesFilter";
 import TresholdFilter from "@/classes/filters/TresholdFilter";
 import CustomButton from "@/components/CustomButton";
@@ -35,7 +34,7 @@ import CustomInputNumber from "@/components/CustomInputNumber";
 import CustomSlider from "@/components/CustomSlider";
 import HistogramChart from "@/components/HistogramChart";
 import RgbImageCanvas from "@/components/RgbImageCanvas";
-import React, { RefObject, useRef } from "react";
+import { RefObject, useRef } from "react";
 
 export default function Home() {
   const convertedRgbImageCanvasRef: RefObject<RgbImageCanvas> = useRef(null);
@@ -216,6 +215,15 @@ export default function Home() {
     });
   }
 
+  const smoothingSliderRef: RefObject<CustomSlider> = useRef<CustomSlider>(null);
+  function onSmoothingFilterClick(): void {
+    const kernelSize: number = smoothingSliderRef.current ? smoothingSliderRef.current.getValue() : 1;
+
+    filterApplier.applyFilterToFirstImage((image: RgbImage): RgbImage => {
+      return new SmoothingFilter().apply(image, kernelSize);
+    });
+  }
+
   function onBinaryAndFilterClick(): void {
     filterApplier.applyBinaryFilterToBothImages((firstImage: BinaryImage, secondImage: BinaryImage): BinaryImage => {
       return new BinaryAndFilter().apply(firstImage, secondImage);
@@ -372,10 +380,14 @@ export default function Home() {
             renderAditionalText={(value: number): string => { return ` ${calculateKernelWidth(value)} X ${calculateKernelWidth(value)}` }} />
           <CustomSlider text="Median" ref={medianSliderRef} onClick={onMedianFilterClick} min={1} max={3} defaultValue={1} step={1}
             renderAditionalText={(value: number): string => { return ` ${calculateKernelWidth(value)} X ${calculateKernelWidth(value)}` }} />
+
           <CustomSlider text="Order" ref={orderSliderRef} onClick={onOrderSliderRefClick} min={1} max={3} defaultValue={1} step={1}
             renderAditionalText={(value: number): string => { return ` ${calculateKernelWidth(value)} X ${calculateKernelWidth(value)}` }} >
             <CustomInputNumber ref={orderIndexRef} placeholder="Order Index" min={1} max={49} />
           </CustomSlider>
+
+          <CustomSlider text="Smoothing" ref={smoothingSliderRef} onClick={onSmoothingFilterClick} min={1} max={3} defaultValue={1} step={1}
+            renderAditionalText={(value: number): string => { return ` ${calculateKernelWidth(value)} X ${calculateKernelWidth(value)}` }} />
         </div>
 
         <div ref={arithmeticTabRef} className="flex-col gap-2 hidden">
@@ -419,7 +431,7 @@ export default function Home() {
       </div>
 
       <div className="flex-1 flex gap-2 flex-col items-center justify-center">
-        <RgbImageCanvas allowUpload={false} ref={convertedRgbImageCanvasRef} text="Converted Image"/>
+        <RgbImageCanvas allowUpload={false} ref={convertedRgbImageCanvasRef} text="Converted Image" />
 
         <CustomButton text="Set as First Image" onClick={onSetAsFirstImageClick} />
         <CustomButton text="Set as Second Image" onClick={onSetAsSecondImageClick} />
