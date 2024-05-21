@@ -352,7 +352,7 @@ export default function Home() {
       </div>
 
       <div className="flex-1 flex-grow p-2 flex flex-col gap-2 items-center justify-center self-start">
-        <div className="flex gap-2">
+        <div className="flex flex-wrap justify-center gap-2">
           <button onClick={() => setFocusedTab(commonTabRef)} className="bg-slate-200 p-2">Common</button>
           <button onClick={() => setFocusedTab(highlightTabRef)} className="bg-slate-200 p-2">Highlight</button>
           <button onClick={() => setFocusedTab(arithmeticTabRef)} className="bg-slate-200 p-2">Arithmetic</button>
