@@ -19,6 +19,7 @@ import DivideImagesFilter from "@/classes/filters/DivideImagesFilter";
 import EqualizeHistogramFilter from "@/classes/filters/EqualizeHistogramFilter";
 import FlipLeftRightFilter from "@/classes/filters/FlipLeftRightFilter";
 import FlipTopDownFilter from "@/classes/filters/FlipTopDownFilter";
+import GaussianFilter from "@/classes/filters/GaussianFilter";
 import LinearBlendingFilter from "@/classes/filters/LinearBlendingFilter";
 import MaximumFilter from "@/classes/filters/MaximumFilter";
 import MedianFilter from "@/classes/filters/MedianFilter";
@@ -224,6 +225,17 @@ export default function Home() {
     });
   }
 
+  const gaussianSliderRef: RefObject<CustomSlider> = useRef<CustomSlider>(null);
+  const gaussianDeviationInputRef: RefObject<CustomInputNumber> = useRef<CustomInputNumber>(null);
+  function onGaussianFilterClick(): void {
+    const kernelSize: number = gaussianSliderRef.current ? gaussianSliderRef.current.getValue() : 1;
+    const deviation: number = gaussianDeviationInputRef.current?.getValue() || 1;
+
+    filterApplier.applyFilterToFirstImage((image: RgbImage): RgbImage => {
+      return new GaussianFilter().apply(image, kernelSize, deviation);
+    });
+  }
+
   function onBinaryAndFilterClick(): void {
     filterApplier.applyBinaryFilterToBothImages((firstImage: BinaryImage, secondImage: BinaryImage): BinaryImage => {
       return new BinaryAndFilter().apply(firstImage, secondImage);
@@ -388,6 +400,11 @@ export default function Home() {
 
           <CustomSlider text="Smoothing" ref={smoothingSliderRef} onClick={onSmoothingFilterClick} min={1} max={3} defaultValue={1} step={1}
             renderAditionalText={(value: number): string => { return ` ${calculateKernelWidth(value)} X ${calculateKernelWidth(value)}` }} />
+
+          <CustomSlider text="Gaussian" ref={gaussianSliderRef} onClick={onGaussianFilterClick} min={1} max={3} defaultValue={1} step={1}
+            renderAditionalText={(value: number): string => { return ` ${calculateKernelWidth(value)} X ${calculateKernelWidth(value)}` }} >
+            <CustomInputNumber ref={gaussianDeviationInputRef} placeholder="Deviation" min={0.01} max={10} />
+          </CustomSlider>
         </div>
 
         <div ref={arithmeticTabRef} className="flex-col gap-2 hidden">
