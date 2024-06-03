@@ -27,6 +27,7 @@ import MinimumFilter from "@/classes/filters/MinimumFilter";
 import MultiplyImagesFilter from "@/classes/filters/MultiplyImagesFilter";
 import NegativeFilter from "@/classes/filters/NegativeFilter";
 import OrderFilter from "@/classes/filters/OrderFilter";
+import PrewittFilter from "@/classes/filters/PrewittFilter";
 import SmoothingFilter from "@/classes/filters/SmoothingFilter";
 import SubtractImagesFilter from "@/classes/filters/SubtractImagesFilter";
 import TresholdFilter from "@/classes/filters/TresholdFilter";
@@ -236,6 +237,15 @@ export default function Home() {
     });
   }
 
+  const prewittSilderRef: RefObject<CustomSlider> = useRef<CustomSlider>(null);
+  function onPrewittFilterClick(): void {
+    const kernelSize: number = prewittSilderRef.current ? prewittSilderRef.current.getValue() : 1;
+
+    filterApplier.applyFilterToFirstImage((image: RgbImage): RgbImage => {
+      return new PrewittFilter().apply(image, kernelSize);
+    });
+  }
+
   function onBinaryAndFilterClick(): void {
     filterApplier.applyBinaryFilterToBothImages((firstImage: BinaryImage, secondImage: BinaryImage): BinaryImage => {
       return new BinaryAndFilter().apply(firstImage, secondImage);
@@ -278,12 +288,13 @@ export default function Home() {
 
   const commonTabRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
   const highlightTabRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
+  const borderDetectionTabRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
   const arithmeticTabRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
   const binaryTabRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
   const histogramTabRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
 
   const tabsRef: RefObject<HTMLDivElement>[] = [
-    commonTabRef, highlightTabRef, arithmeticTabRef, binaryTabRef, histogramTabRef
+    commonTabRef, highlightTabRef, borderDetectionTabRef, arithmeticTabRef, binaryTabRef, histogramTabRef
   ];
 
   function setFocusedTab(ref: RefObject<HTMLDivElement>): void {
@@ -355,6 +366,7 @@ export default function Home() {
         <div className="flex flex-wrap justify-center gap-2">
           <button onClick={() => setFocusedTab(commonTabRef)} className="bg-slate-200 p-2">Common</button>
           <button onClick={() => setFocusedTab(highlightTabRef)} className="bg-slate-200 p-2">Highlight</button>
+          <button onClick={() => setFocusedTab(borderDetectionTabRef)} className="bg-slate-200 p-2">Border Detection</button>
           <button onClick={() => setFocusedTab(arithmeticTabRef)} className="bg-slate-200 p-2">Arithmetic</button>
           <button onClick={() => setFocusedTab(binaryTabRef)} className="bg-slate-200 p-2">Binary</button>
           <button onClick={() => setFocusedTab(histogramTabRef)} className="bg-slate-200 p-2">Histogram</button>
@@ -405,6 +417,12 @@ export default function Home() {
             renderAditionalText={(value: number): string => { return ` ${calculateKernelWidth(value)} X ${calculateKernelWidth(value)}` }} >
             <CustomInputNumber ref={gaussianDeviationInputRef} placeholder="Deviation" min={0.01} max={10} />
           </CustomSlider>
+        </div>
+
+
+        <div ref={borderDetectionTabRef} className="flex-col gap-2 hidden">
+          <CustomSlider text="Prewitt" ref={prewittSilderRef} onClick={onPrewittFilterClick} min={1} max={3} defaultValue={1} step={1}
+            renderAditionalText={(value: number): string => { return ` ${calculateKernelWidth(value)} X ${calculateKernelWidth(value)}` }} />
         </div>
 
         <div ref={arithmeticTabRef} className="flex-col gap-2 hidden">

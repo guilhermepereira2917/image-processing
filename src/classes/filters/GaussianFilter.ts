@@ -1,24 +1,12 @@
-import applyKernel from "../KernelApplier";
 import { calculateKernelWidth } from "../KernelCalculator";
-import { RgbImage, RgbPixel } from "../RgbImage";
+import { RgbImage } from "../RgbImage";
+import KernelFilterApplier from "./KernelFilterApplier";
 
 export default class GaussianFilter {
   apply(image: RgbImage, range: number, deviation: number): RgbImage {
-    const resultImage: RgbImage = image.clone();
     const gaussianKernel: number[][] = this.getGaussianKernel(range, deviation);
 
-    resultImage.pixels.forEach((row: RgbPixel[], rowIndex: number) => {
-      row.forEach((pixel: RgbPixel, columnIndex: number) => {
-        const pixels: (RgbPixel | undefined)[][] = image.getPixelRange(rowIndex, columnIndex, range);
-        const pixelWithKernelApplied = applyKernel(pixels, gaussianKernel);
-
-        pixel.red = pixelWithKernelApplied.red;
-        pixel.green = pixelWithKernelApplied.green;
-        pixel.blue = pixelWithKernelApplied.blue;
-      });
-    });
-
-    return resultImage;
+    return new KernelFilterApplier().apply(image, range, gaussianKernel);
   }
 
   getGaussianKernel(range: number, deviation: number): number[][] {
