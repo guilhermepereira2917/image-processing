@@ -20,6 +20,7 @@ import EqualizeHistogramFilter from "@/classes/filters/EqualizeHistogramFilter";
 import FlipLeftRightFilter from "@/classes/filters/FlipLeftRightFilter";
 import FlipTopDownFilter from "@/classes/filters/FlipTopDownFilter";
 import GaussianFilter from "@/classes/filters/GaussianFilter";
+import LaplacianFilter from "@/classes/filters/LaplacianFilter";
 import LinearBlendingFilter from "@/classes/filters/LinearBlendingFilter";
 import MaximumFilter from "@/classes/filters/MaximumFilter";
 import MedianFilter from "@/classes/filters/MedianFilter";
@@ -29,6 +30,7 @@ import NegativeFilter from "@/classes/filters/NegativeFilter";
 import OrderFilter from "@/classes/filters/OrderFilter";
 import PrewittFilter from "@/classes/filters/PrewittFilter";
 import SmoothingFilter from "@/classes/filters/SmoothingFilter";
+import SobelFilter from "@/classes/filters/SobelFilter";
 import SubtractImagesFilter from "@/classes/filters/SubtractImagesFilter";
 import TresholdFilter from "@/classes/filters/TresholdFilter";
 import CustomButton from "@/components/CustomButton";
@@ -237,12 +239,21 @@ export default function Home() {
     });
   }
 
-  const prewittSilderRef: RefObject<CustomSlider> = useRef<CustomSlider>(null);
   function onPrewittFilterClick(): void {
-    const kernelSize: number = prewittSilderRef.current ? prewittSilderRef.current.getValue() : 1;
-
     filterApplier.applyFilterToFirstImage((image: RgbImage): RgbImage => {
-      return new PrewittFilter().apply(image, kernelSize);
+      return new PrewittFilter().apply(image);
+    });
+  }
+
+  function onSobelFilterclick(): void {
+    filterApplier.applyFilterToFirstImage((image: RgbImage): RgbImage => {
+      return new SobelFilter().apply(image);
+    });
+  }
+
+  function onLaplacianFilterClick(): void {
+    filterApplier.applyFilterToFirstImage((image: RgbImage): RgbImage => {
+      return new LaplacianFilter().apply(image);
     });
   }
 
@@ -421,8 +432,9 @@ export default function Home() {
 
 
         <div ref={borderDetectionTabRef} className="flex-col gap-2 hidden">
-          <CustomSlider text="Prewitt" ref={prewittSilderRef} onClick={onPrewittFilterClick} min={1} max={3} defaultValue={1} step={1}
-            renderAditionalText={(value: number): string => { return ` ${calculateKernelWidth(value)} X ${calculateKernelWidth(value)}` }} />
+          <CustomButton text="Prewitt" onClick={onPrewittFilterClick} />
+          <CustomButton text="Sobel" onClick={onSobelFilterclick} />
+          <CustomButton text="Laplacian" onClick={onLaplacianFilterClick} />
         </div>
 
         <div ref={arithmeticTabRef} className="flex-col gap-2 hidden">

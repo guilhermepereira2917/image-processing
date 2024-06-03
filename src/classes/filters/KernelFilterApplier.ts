@@ -1,12 +1,13 @@
+import { calculateKernelRange } from "../KernelCalculator";
 import { RgbImage, RgbPixel } from "../RgbImage";
 
 export default class KernelFilterApplier {
-  apply(image: RgbImage, range: number, kernel: number[][]): RgbImage {
+  apply(image: RgbImage, kernel: number[][]): RgbImage {
     const resultImage: RgbImage = image.clone();
 
     resultImage.pixels.forEach((row: RgbPixel[], rowIndex: number) => {
       row.forEach((pixel: RgbPixel, columnIndex: number) => {
-        const pixels: (RgbPixel | undefined)[][] = image.getPixelRange(rowIndex, columnIndex, range);
+        const pixels: (RgbPixel | undefined)[][] = image.getPixelRange(rowIndex, columnIndex, calculateKernelRange(kernel.length));
         const pixelWithKernelApplied = this.applyKernel(pixels, kernel);
 
         pixel.red = pixelWithKernelApplied.red;

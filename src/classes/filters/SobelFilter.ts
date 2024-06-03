@@ -2,17 +2,17 @@ import { RgbImage } from "../RgbImage";
 import AddImagesFilter from "./AddImagesFilter";
 import KernelFilterApplier from "./KernelFilterApplier";
 
-export default class PrewittFilter {
+export default class SobelFilter {
   apply(image: RgbImage): RgbImage {
     const horizontalKernel: number[][] = [
-      [1, 1, 1],
+      [1, 2, 1],
       [0, 0, 0],
-      [-1, -1, -1],
+      [-1, -2, -1],
     ];
 
     const verticalKernel: number[][] = [
       [1, 0, -1],
-      [1, 0, -1],
+      [2, 0, -2],
       [1, 0, -1],
     ];
 

@@ -6,7 +6,7 @@ export default class GaussianFilter {
   apply(image: RgbImage, range: number, deviation: number): RgbImage {
     const gaussianKernel: number[][] = this.getGaussianKernel(range, deviation);
 
-    return new KernelFilterApplier().apply(image, range, gaussianKernel);
+    return new KernelFilterApplier().apply(image, gaussianKernel);
   }
 
   getGaussianKernel(range: number, deviation: number): number[][] {
