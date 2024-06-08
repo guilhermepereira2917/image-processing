@@ -13,7 +13,9 @@ import BinaryOrFilter from "@/classes/filters/BinaryOrFilter";
 import BinaryXorFilter from "@/classes/filters/BinaryXorFilter";
 import BlurFilter from "@/classes/filters/BlurFilter";
 import BrightnessFilter from "@/classes/filters/BrightnessFilter";
+import ClosingFilter from "@/classes/filters/ClosingFilter";
 import ConcatImageFilter from "@/classes/filters/ConcatImageFilter";
+import ContourFilter from "@/classes/filters/ContourFilter";
 import CropImageFilter from "@/classes/filters/CropImageFilter";
 import DilationFilter from "@/classes/filters/DilationFilter";
 import DivideImagesFilter from "@/classes/filters/DivideImagesFilter";
@@ -29,6 +31,7 @@ import MedianFilter from "@/classes/filters/MedianFilter";
 import MinimumFilter from "@/classes/filters/MinimumFilter";
 import MultiplyImagesFilter from "@/classes/filters/MultiplyImagesFilter";
 import NegativeFilter from "@/classes/filters/NegativeFilter";
+import OpeningFilter from "@/classes/filters/OpeningFilter";
 import OrderFilter from "@/classes/filters/OrderFilter";
 import PrewittFilter from "@/classes/filters/PrewittFilter";
 import SmoothingFilter from "@/classes/filters/SmoothingFilter";
@@ -271,6 +274,24 @@ export default function Home() {
     });
   }
 
+  function onOpeningFilterClick(): void {
+    filterApplier.applyBinaryFilterToFirstImage((image: BinaryImage): BinaryImage => {
+      return new OpeningFilter().apply(image);
+    });
+  }
+
+  function onClosingFilterClick(): void {
+    filterApplier.applyBinaryFilterToFirstImage((image: BinaryImage): BinaryImage => {
+      return new ClosingFilter().apply(image);
+    });
+  }
+
+  function onContourFilterClick(): void {
+    filterApplier.applyBinaryFilterToFirstImage((image: BinaryImage): BinaryImage => {
+      return new ContourFilter().apply(image);
+    });
+  }
+
   function onBinaryAndFilterClick(): void {
     filterApplier.applyBinaryFilterToBothImages((firstImage: BinaryImage, secondImage: BinaryImage): BinaryImage => {
       return new BinaryAndFilter().apply(firstImage, secondImage);
@@ -320,7 +341,7 @@ export default function Home() {
   const histogramTabRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
 
   const tabsRef: RefObject<HTMLDivElement>[] = [
-    commonTabRef, highlightTabRef, borderDetectionTabRef, arithmeticTabRef, binaryTabRef, histogramTabRef
+    commonTabRef, highlightTabRef, borderDetectionTabRef, morphologicalTabRef, arithmeticTabRef, binaryTabRef, histogramTabRef
   ];
 
   function setFocusedTab(ref: RefObject<HTMLDivElement>): void {
@@ -456,6 +477,9 @@ export default function Home() {
         <div ref={morphologicalTabRef} className="flex-col gap-2 hidden">
           <CustomButton text="Dilation" onClick={onDilationFilterClick} />
           <CustomButton text="Erosion" onClick={onErosionFilterClick} />
+          <CustomButton text="Opening" onClick={onOpeningFilterClick} />
+          <CustomButton text="Closing" onClick={onClosingFilterClick} />
+          <CustomButton text="Countour" onClick={onContourFilterClick} />
         </div>
 
         <div ref={arithmeticTabRef} className="flex-col gap-2 hidden">
