@@ -15,6 +15,7 @@ import BlurFilter from "@/classes/filters/BlurFilter";
 import BrightnessFilter from "@/classes/filters/BrightnessFilter";
 import ConcatImageFilter from "@/classes/filters/ConcatImageFilter";
 import CropImageFilter from "@/classes/filters/CropImageFilter";
+import DilationFilter from "@/classes/filters/DilationFilter";
 import DivideImagesFilter from "@/classes/filters/DivideImagesFilter";
 import EqualizeHistogramFilter from "@/classes/filters/EqualizeHistogramFilter";
 import FlipLeftRightFilter from "@/classes/filters/FlipLeftRightFilter";
@@ -257,6 +258,12 @@ export default function Home() {
     });
   }
 
+  function onDilationFilterClick(): void {
+    filterApplier.applyBinaryFilterToFirstImage((image: BinaryImage): BinaryImage => {
+      return new DilationFilter().apply(image);
+    });
+  }
+
   function onBinaryAndFilterClick(): void {
     filterApplier.applyBinaryFilterToBothImages((firstImage: BinaryImage, secondImage: BinaryImage): BinaryImage => {
       return new BinaryAndFilter().apply(firstImage, secondImage);
@@ -300,6 +307,7 @@ export default function Home() {
   const commonTabRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
   const highlightTabRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
   const borderDetectionTabRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
+  const morphologicalTabRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
   const arithmeticTabRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
   const binaryTabRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
   const histogramTabRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
@@ -378,6 +386,7 @@ export default function Home() {
           <button onClick={() => setFocusedTab(commonTabRef)} className="bg-slate-200 p-2">Common</button>
           <button onClick={() => setFocusedTab(highlightTabRef)} className="bg-slate-200 p-2">Highlight</button>
           <button onClick={() => setFocusedTab(borderDetectionTabRef)} className="bg-slate-200 p-2">Border Detection</button>
+          <button onClick={() => setFocusedTab(morphologicalTabRef)} className="bg-slate-200 p-2">Morphological</button>
           <button onClick={() => setFocusedTab(arithmeticTabRef)} className="bg-slate-200 p-2">Arithmetic</button>
           <button onClick={() => setFocusedTab(binaryTabRef)} className="bg-slate-200 p-2">Binary</button>
           <button onClick={() => setFocusedTab(histogramTabRef)} className="bg-slate-200 p-2">Histogram</button>
@@ -435,6 +444,10 @@ export default function Home() {
           <CustomButton text="Prewitt" onClick={onPrewittFilterClick} />
           <CustomButton text="Sobel" onClick={onSobelFilterclick} />
           <CustomButton text="Laplacian" onClick={onLaplacianFilterClick} />
+        </div>
+
+        <div ref={morphologicalTabRef} className="flex-col gap-2 hidden">
+          <CustomButton text="Dilation" onClick={onDilationFilterClick} />
         </div>
 
         <div ref={arithmeticTabRef} className="flex-col gap-2 hidden">

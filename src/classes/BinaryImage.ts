@@ -9,6 +9,22 @@ class BinaryImage {
     return this.pixels[rowIndex][columnIndex];
   }
 
+  getPixelRange(rowIndex: number, columnIndex: number, range: number): (BinaryPixel | undefined)[][] {
+    const pixelRange: (BinaryPixel | undefined)[][] = [];
+
+    for (let row: number = rowIndex - range; row <= rowIndex + range; row++) {
+      const pixelRangeRow: (BinaryPixel | undefined)[] = [];
+
+      for (let column: number = columnIndex - range; column <= columnIndex + range; column++) {
+        pixelRangeRow.push(this.getPixel(row, column));
+      }
+
+      pixelRange.push(pixelRangeRow);
+    }
+
+    return pixelRange;
+  }
+
   clone(): BinaryImage {
     const clonedImage: BinaryImage = new BinaryImage();
 
