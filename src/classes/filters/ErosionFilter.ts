@@ -1,7 +1,7 @@
 import { BinaryImage, BinaryPixel, BinaryPixelValueEnum } from "../BinaryImage";
 import { calculateKernelRange } from "../KernelCalculator";
 
-export default class DilationFilter {
+export default class ErosionFilter {
   apply(image: BinaryImage): BinaryImage {
     const structuringElement: number[] = [
       [0, 1, 0],
@@ -13,7 +13,7 @@ export default class DilationFilter {
     resultImage.pixels.forEach((row: BinaryPixel[], rowIndex): void => {
       row.forEach((pixel: BinaryPixel, columnIndex: number): void => {
         const neighbors: (BinaryPixel | undefined)[][] = image.getPixelRange(rowIndex, columnIndex, 1);
-        const hasWhiteNeighbor: boolean = neighbors.flat().some((neighborPixel: BinaryPixel | undefined, neighborIndex: number): boolean => {
+        const hasBlackNeighbor: boolean = neighbors.flat().some((neighborPixel: BinaryPixel | undefined, neighborIndex: number): boolean => {
           if (!neighborPixel) {
             return false;
           }
@@ -22,10 +22,10 @@ export default class DilationFilter {
             return false;
           }
 
-          return neighborPixel.isWhite();
+          return neighborPixel.isBlack();
         });
 
-        pixel.value = hasWhiteNeighbor ? BinaryPixelValueEnum.white : BinaryPixelValueEnum.black;
+        pixel.value = hasBlackNeighbor ? BinaryPixelValueEnum.black : BinaryPixelValueEnum.white;
       });
     });
 

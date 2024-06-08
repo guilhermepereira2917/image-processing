@@ -18,6 +18,7 @@ import CropImageFilter from "@/classes/filters/CropImageFilter";
 import DilationFilter from "@/classes/filters/DilationFilter";
 import DivideImagesFilter from "@/classes/filters/DivideImagesFilter";
 import EqualizeHistogramFilter from "@/classes/filters/EqualizeHistogramFilter";
+import ErosionFilter from "@/classes/filters/ErosionFilter";
 import FlipLeftRightFilter from "@/classes/filters/FlipLeftRightFilter";
 import FlipTopDownFilter from "@/classes/filters/FlipTopDownFilter";
 import GaussianFilter from "@/classes/filters/GaussianFilter";
@@ -264,6 +265,12 @@ export default function Home() {
     });
   }
 
+  function onErosionFilterClick(): void {
+    filterApplier.applyBinaryFilterToFirstImage((image: BinaryImage): BinaryImage => {
+      return new ErosionFilter().apply(image);
+    });
+  }
+
   function onBinaryAndFilterClick(): void {
     filterApplier.applyBinaryFilterToBothImages((firstImage: BinaryImage, secondImage: BinaryImage): BinaryImage => {
       return new BinaryAndFilter().apply(firstImage, secondImage);
@@ -448,6 +455,7 @@ export default function Home() {
 
         <div ref={morphologicalTabRef} className="flex-col gap-2 hidden">
           <CustomButton text="Dilation" onClick={onDilationFilterClick} />
+          <CustomButton text="Erosion" onClick={onErosionFilterClick} />
         </div>
 
         <div ref={arithmeticTabRef} className="flex-col gap-2 hidden">
