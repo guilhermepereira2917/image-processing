@@ -1,5 +1,5 @@
-import React, { RefObject, createRef, useRef } from "react";
-import CodeSnippet from "./CodeSnippet";
+import CodeSnippet from "@/app/code/page";
+import React, { RefObject, Suspense, createRef, useRef } from "react";
 
 export interface CustomButtonProps {
   text: string;
@@ -41,7 +41,6 @@ export default class CustomButton extends React.Component<CustomButtonProps, Cus
               <div className="bg-sky-800 flex justify-end">
                 <button className="text-white font-bold p-2" onClick={toggleCodeSnippet}>X</button>
               </div>
-              <CodeSnippet codeSnippetClass={this.props.codeSnippetClass} />
             </div>
           </>
         )}
