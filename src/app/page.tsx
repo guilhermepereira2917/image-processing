@@ -1,3 +1,5 @@
+'use client';
+
 import { BinaryImage } from "@/classes/BinaryImage";
 import FilterApplier from "@/classes/FilterApplier";
 import { calculateKernelWidth } from "@/classes/KernelCalculator";
