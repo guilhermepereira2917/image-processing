@@ -13,8 +13,6 @@ export default class SmoothingFilter {
 
         sortRgbPixels(neighbors);
 
-        console.log(range, neighbors);
-
         const minimumPixel: RgbPixel = neighbors[0];
         const maximumPixel: RgbPixel = neighbors[neighbors.length - 1];
 
