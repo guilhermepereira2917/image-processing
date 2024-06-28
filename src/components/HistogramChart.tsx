@@ -1,11 +1,11 @@
 'use client';
 
 import { BarElement, CategoryScale, Chart, Filler, Legend, LineElement, LinearScale, PointElement, Title, Tooltip } from "chart.js";
-import { Component, ReactNode, createRef, useState } from "react";
+import { Component, ReactNode } from "react";
 import { Bar } from "react-chartjs-2";
 import { RgbImage } from "../classes/RgbImage";
-import HistogramData from "../classes/histogram/HistogramData";
-import HistogramDataGenerator from "../classes/histogram/HistogramDataGenerator";
+import HistogramData from "../classes/filters/HistogramData";
+import HistogramDataGenerator from "../classes/filters/HistogramDataGenerator";
 
 Chart.register(
   CategoryScale,

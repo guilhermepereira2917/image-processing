@@ -17,7 +17,7 @@ import BlurFilter from "@/classes/filters/BlurFilter";
 import BrightnessFilter from "@/classes/filters/BrightnessFilter";
 import ClosingFilter from "@/classes/filters/ClosingFilter";
 import ConcatImageFilter from "@/classes/filters/ConcatImageFilter";
-import ContourFilter from "@/classes/filters/ContourFilter";
+import CountourFilter from "@/classes/filters/CountourFilter";
 import CropImageFilter from "@/classes/filters/CropImageFilter";
 import DilationFilter from "@/classes/filters/DilationFilter";
 import DivideImagesFilter from "@/classes/filters/DivideImagesFilter";
@@ -26,6 +26,7 @@ import ErosionFilter from "@/classes/filters/ErosionFilter";
 import FlipLeftRightFilter from "@/classes/filters/FlipLeftRightFilter";
 import FlipTopDownFilter from "@/classes/filters/FlipTopDownFilter";
 import GaussianFilter from "@/classes/filters/GaussianFilter";
+import HistogramDataGenerator from "@/classes/filters/HistogramDataGenerator";
 import LaplacianFilter from "@/classes/filters/LaplacianFilter";
 import LinearBlendingFilter from "@/classes/filters/LinearBlendingFilter";
 import MaximumFilter from "@/classes/filters/MaximumFilter";
@@ -290,7 +291,7 @@ export default function AllFilters(): ReactNode {
 
   function onContourFilterClick(): void {
     filterApplier.applyBinaryFilterToFirstImage((image: BinaryImage): BinaryImage => {
-      return new ContourFilter().apply(image);
+      return new CountourFilter().apply(image);
     });
   }
 
@@ -429,97 +430,97 @@ export default function AllFilters(): ReactNode {
             <CustomButton text="Crop " onClick={onCropImageClick} codeSnippetClass={CropImageFilter} />
           </div>
 
-          <CustomButton text="Negative" onClick={onNegativeFilterClick} />
+          <CustomButton text="Negative" onClick={onNegativeFilterClick} codeSnippetClass={NegativeFilter} />
 
           <CustomSlider text="Brightness" ref={brightnessSliderRef} onClick={onBrightnessFilterClick} min={0} max={1000} defaultValue={100} step={10}
-            renderAditionalText={(value: number): string => { return ` ${value}%` }} />
+            renderAditionalText={(value: number): string => { return ` ${value}%` }} codeSnippetClass={BrightnessFilter} />
 
           <CustomSlider text="Treshold" ref={tresholdSliderRef} onClick={onThresholdFilterClick} min={0} max={255} defaultValue={127} step={1}
-            renderAditionalText={(value: number): string => { return ` ${value}` }} />
+            renderAditionalText={(value: number): string => { return ` ${value}` }} codeSnippetClass={TresholdFilter} />
 
-          <CustomButton text="Flip Left-Right" onClick={onFlipLeftRightClick} />
-          <CustomButton text="Flip Top-Down" onClick={onFlipTopDownClick} />
-          <CustomButton text="Concat" onClick={onConcatImagesClick} />
+          <CustomButton text="Flip Left-Right" onClick={onFlipLeftRightClick} codeSnippetClass={FlipLeftRightFilter} />
+          <CustomButton text="Flip Top-Down" onClick={onFlipTopDownClick} codeSnippetClass={FlipTopDownFilter} />
+          <CustomButton text="Concat" onClick={onConcatImagesClick} codeSnippetClass={ConcatImageFilter} />
 
           <CustomSlider text="Linear Blending" ref={linearSliderRef} onClick={onLinearBlendingFilterClick} min={0} max={100} defaultValue={50} step={1}
-            renderAditionalText={(value: number): string => { return ` ${value}%` }} />
+            renderAditionalText={(value: number): string => { return ` ${value}%` }} codeSnippetClass={LinearBlendingFilter} />
         </div>
 
         <div ref={highlightTabRef} className="flex-col gap-2 hidden">
           <CustomSlider text="Blur" ref={blurSliderRef} onClick={onBlurFilterClick} min={1} max={3} defaultValue={1} step={1}
-            renderAditionalText={(value: number): string => { return ` ${calculateKernelWidth(value)} X ${calculateKernelWidth(value)}` }} />
+            renderAditionalText={(value: number): string => { return ` ${calculateKernelWidth(value)} X ${calculateKernelWidth(value)}` }} codeSnippetClass={BlurFilter} />
           <CustomSlider text="Maximum" ref={maximumSliderRef} onClick={onMaximumFilterClick} min={1} max={3} defaultValue={1} step={1}
-            renderAditionalText={(value: number): string => { return ` ${calculateKernelWidth(value)} X ${calculateKernelWidth(value)}` }} />
+            renderAditionalText={(value: number): string => { return ` ${calculateKernelWidth(value)} X ${calculateKernelWidth(value)}` }} codeSnippetClass={MaximumFilter} />
           <CustomSlider text="Minimum" ref={minimumSliderRef} onClick={onMinimunFilterClick} min={1} max={3} defaultValue={1} step={1}
-            renderAditionalText={(value: number): string => { return ` ${calculateKernelWidth(value)} X ${calculateKernelWidth(value)}` }} />
+            renderAditionalText={(value: number): string => { return ` ${calculateKernelWidth(value)} X ${calculateKernelWidth(value)}` }} codeSnippetClass={MinimumFilter} />
           <CustomSlider text="Median" ref={medianSliderRef} onClick={onMedianFilterClick} min={1} max={3} defaultValue={1} step={1}
-            renderAditionalText={(value: number): string => { return ` ${calculateKernelWidth(value)} X ${calculateKernelWidth(value)}` }} />
+            renderAditionalText={(value: number): string => { return ` ${calculateKernelWidth(value)} X ${calculateKernelWidth(value)}` }} codeSnippetClass={MedianFilter} />
 
           <CustomSlider text="Order" ref={orderSliderRef} onClick={onOrderSliderRefClick} min={1} max={3} defaultValue={1} step={1}
-            renderAditionalText={(value: number): string => { return ` ${calculateKernelWidth(value)} X ${calculateKernelWidth(value)}` }} >
+            renderAditionalText={(value: number): string => { return ` ${calculateKernelWidth(value)} X ${calculateKernelWidth(value)}` }} codeSnippetClass={OrderFilter}>
             <CustomInputNumber ref={orderIndexRef} placeholder="Order Index" min={1} max={49} />
           </CustomSlider>
 
           <CustomSlider text="Smoothing" ref={smoothingSliderRef} onClick={onSmoothingFilterClick} min={1} max={3} defaultValue={1} step={1}
-            renderAditionalText={(value: number): string => { return ` ${calculateKernelWidth(value)} X ${calculateKernelWidth(value)}` }} />
+            renderAditionalText={(value: number): string => { return ` ${calculateKernelWidth(value)} X ${calculateKernelWidth(value)}` }} codeSnippetClass={SmoothingFilter} />
 
           <CustomSlider text="Gaussian" ref={gaussianSliderRef} onClick={onGaussianFilterClick} min={1} max={3} defaultValue={1} step={1}
-            renderAditionalText={(value: number): string => { return ` ${calculateKernelWidth(value)} X ${calculateKernelWidth(value)}` }} >
+            renderAditionalText={(value: number): string => { return ` ${calculateKernelWidth(value)} X ${calculateKernelWidth(value)}` }} codeSnippetClass={GaussianFilter}>
             <CustomInputNumber ref={gaussianDeviationInputRef} placeholder="Deviation" min={0.01} max={10} />
           </CustomSlider>
         </div>
 
 
         <div ref={borderDetectionTabRef} className="flex-col gap-2 hidden">
-          <CustomButton text="Prewitt" onClick={onPrewittFilterClick} />
-          <CustomButton text="Sobel" onClick={onSobelFilterclick} />
-          <CustomButton text="Laplacian" onClick={onLaplacianFilterClick} />
+          <CustomButton text="Prewitt" onClick={onPrewittFilterClick} codeSnippetClass={PrewittFilter} />
+          <CustomButton text="Sobel" onClick={onSobelFilterclick} codeSnippetClass={SobelFilter} />
+          <CustomButton text="Laplacian" onClick={onLaplacianFilterClick} codeSnippetClass={LaplacianFilter} />
         </div>
 
         <div ref={morphologicalTabRef} className="flex-col gap-2 hidden">
-          <CustomButton text="Dilation" onClick={onDilationFilterClick} />
-          <CustomButton text="Erosion" onClick={onErosionFilterClick} />
-          <CustomButton text="Opening" onClick={onOpeningFilterClick} />
-          <CustomButton text="Closing" onClick={onClosingFilterClick} />
-          <CustomButton text="Countour" onClick={onContourFilterClick} />
+          <CustomButton text="Dilation" onClick={onDilationFilterClick} codeSnippetClass={DilationFilter} />
+          <CustomButton text="Erosion" onClick={onErosionFilterClick} codeSnippetClass={ErosionFilter} />
+          <CustomButton text="Opening" onClick={onOpeningFilterClick} codeSnippetClass={OpeningFilter} />
+          <CustomButton text="Closing" onClick={onClosingFilterClick} codeSnippetClass={ClosingFilter} />
+          <CustomButton text="Countour" onClick={onContourFilterClick} codeSnippetClass={CountourFilter} />
         </div>
 
         <div ref={arithmeticTabRef} className="flex-col gap-2 hidden">
-          <CustomButton text="Add" onClick={onAddImagesClick} />
-          <CustomButton text="Subtract" onClick={onSubtractImagesClick} />
-          <CustomButton text="Multiply" onClick={onMultiplyImagesClick} />
-          <CustomButton text="Divide" onClick={onDivideImagesClick} />
+          <CustomButton text="Add" onClick={onAddImagesClick} codeSnippetClass={AddImagesFilter} />
+          <CustomButton text="Subtract" onClick={onSubtractImagesClick} codeSnippetClass={SubtractImagesFilter} />
+          <CustomButton text="Multiply" onClick={onMultiplyImagesClick} codeSnippetClass={MultiplyImagesFilter} />
+          <CustomButton text="Divide" onClick={onDivideImagesClick} codeSnippetClass={DivideImagesFilter} />
 
           <div className="flex flex-col gap-1">
             <CustomInputNumber ref={addImageInputRef} placeholder="Value" min={1} max={256} />
-            <CustomButton text="Add" onClick={onArithmeticAddImageClick} />
+            <CustomButton text="Add" onClick={onArithmeticAddImageClick} codeSnippetClass={ArithmeticAddFilter} />
           </div>
           <div className="flex flex-col gap-1">
             <CustomInputNumber ref={subtractImageInputRef} placeholder="Value" min={1} max={256} />
-            <CustomButton text="Subtract" onClick={onArithmeticSubtractImageClick} />
+            <CustomButton text="Subtract" onClick={onArithmeticSubtractImageClick} codeSnippetClass={ArithmeticSubtractFilter} />
           </div>
           <div className="flex flex-col gap-1">
             <CustomInputNumber ref={multiplyImageInputRef} placeholder="Value" min={1} max={256} />
-            <CustomButton text="Multiply" onClick={onArithmeticMultiplyImageClick} />
+            <CustomButton text="Multiply" onClick={onArithmeticMultiplyImageClick} codeSnippetClass={ArithmeticMultiplyFilter} />
           </div>
           <div className="flex flex-col gap-1">
             <CustomInputNumber ref={divideImageInputRef} placeholder="Value" min={1} max={256} />
-            <CustomButton text="Divide" onClick={onArithmeticDivideImageClick} />
+            <CustomButton text="Divide" onClick={onArithmeticDivideImageClick} codeSnippetClass={ArithmeticDivideFilter} />
           </div>
         </div>
 
         <div ref={binaryTabRef} className="flex-col gap-2 hidden">
-          <CustomButton text="AND" onClick={onBinaryAndFilterClick} />
-          <CustomButton text="OR" onClick={onBinaryOrFilterClick} />
-          <CustomButton text="NOT" onClick={onBinaryNotFilterClick} />
-          <CustomButton text="XOR" onClick={onBinaryXorFilterClick} />
+          <CustomButton text="AND" onClick={onBinaryAndFilterClick} codeSnippetClass={BinaryAndFilter} />
+          <CustomButton text="OR" onClick={onBinaryOrFilterClick} codeSnippetClass={BinaryOrFilter} />
+          <CustomButton text="NOT" onClick={onBinaryNotFilterClick} codeSnippetClass={BinaryNotFilter} />
+          <CustomButton text="XOR" onClick={onBinaryXorFilterClick} codeSnippetClass={BinaryXorFilter} />
         </div>
 
         <div ref={histogramTabRef} className="gap-2 w-full hidden">
-          <CustomButton text="Update Histogram" onClick={onUpdateHistogramClick} />
+          <CustomButton text="Update Histogram" onClick={onUpdateHistogramClick} codeSnippetClass={HistogramDataGenerator} />
           <HistogramChart ref={histogramChartRef} />
 
-          <CustomButton text="Equalize Histogram" onClick={onEqualizeHistogramClick} />
+          <CustomButton text="Equalize Histogram" onClick={onEqualizeHistogramClick} codeSnippetClass={EqualizeHistogramFilter}/>
           <HistogramChart ref={equalizedHistogramChartRef} />
         </div>
       </div>

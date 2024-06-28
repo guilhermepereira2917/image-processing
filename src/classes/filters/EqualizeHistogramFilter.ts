@@ -1,6 +1,6 @@
 import { RgbImage, RgbPixel } from "../RgbImage";
-import HistogramData from "../histogram/HistogramData";
-import HistogramDataGenerator from "../histogram/HistogramDataGenerator";
+import HistogramData from "../filters/HistogramData";
+import HistogramDataGenerator from "../filters/HistogramDataGenerator";
 
 export default class EqualizeHistogramFilter {
   equalize(image: RgbImage): RgbImage {
