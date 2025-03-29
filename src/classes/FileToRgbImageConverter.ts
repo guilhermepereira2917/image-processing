@@ -43,7 +43,7 @@ export default class FileToRgbImageConverter {
             }
           }
 
-          const resizedImage: RgbImage = new ResizeFilter().resize(convertedImage, 256, 256);
+          const resizedImage: RgbImage = new ResizeFilter().resize(convertedImage, 320, 320);
           resolve(resizedImage);
         }
 

@@ -66,24 +66,24 @@ export default function CodeSnippet() {
     )
   } else if (error) {
     content = (
-      <span>Loading...</span>
+      <span>{error}</span>
     )
   } else {
     content = (
       <div
-        className="p-2 w-full h-full overflow-y-scroll overflow-x-scroll"
+        className="p-2 w-full h-full"
         dangerouslySetInnerHTML={{ __html: fileContent }}
       />)
   }
 
   return (
-    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col w-[60vw] h-[50vw] max-w-[90vw] max-h-[80vh] outline outline-sky-500 bg-white rounded">
+    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col w-[900px] h-[600px] max-w-[90vw] max-h-[80vh] outline outline-sky-500 bg-white rounded">
       <div className="bg-sky-800 flex justify-between">
         <p className="text-white font-bold p-2">{fileName}</p>
         <button onClick={handleCloseClick} className="text-white font-bold p-2 cursor-pointer">X</button>
       </div>
 
-      <div className="w-full h-full flex items-center justify-center">
+      <div className="w-full h-full flex items-center justify-center overflow-y-scroll overflow-x-scroll">
         {content}
       </div>
     </div>

@@ -403,10 +403,10 @@ export default function AllFilters(): ReactNode {
     <main className="w-full mt-4 p-2 flex flex-wrap items-center">
       <div className="flex-1 flex flex-col justify-center items-center p-2">
         <RgbImageCanvas allowUpload={true} text="Upload First Image"
-          ref={firstRgbImageCanvasRef} onImageChanged={onFirstImageChange} />
+          ref={firstRgbImageCanvasRef} onImageChanged={onFirstImageChange} exampleImage="/lenna.png"/>
 
         <RgbImageCanvas allowUpload={true} text="Upload Second Image"
-          ref={secondRgbImageCanvasRef} onImageChanged={onSecondImageChange} />
+          ref={secondRgbImageCanvasRef} onImageChanged={onSecondImageChange} exampleImage="football.png"/>
       </div>
 
       <div className="flex-1 flex-grow p-2 flex flex-col gap-2 items-center justify-center self-start">
