@@ -1,4 +1,4 @@
-import React, { Component, ReactNode, RefObject, createRef } from "react";
+import React, { ReactNode, RefObject, createRef } from "react";
 import CustomButton, { CustomButtonProps } from "./CustomButton";
 import InputSlider, { InputSliderProps } from "./InputSlider";
 
@@ -12,7 +12,7 @@ interface CustomSliderState {
 }
 
 export default class CustomSlider extends React.Component<CustomSliderProps, CustomSliderState> {
-  inputRef: RefObject<InputSlider> = createRef();
+  inputRef: RefObject<InputSlider | null> = createRef();
 
   constructor(props: CustomSliderProps) {
     super(props);

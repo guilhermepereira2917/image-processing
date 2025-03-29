@@ -10,7 +10,7 @@ export interface InputSliderProps {
 }
 
 export default class InputSlider extends React.Component<InputSliderProps> {
-  inputRef: RefObject<HTMLInputElement> = createRef();
+  inputRef: RefObject<HTMLInputElement | null> = createRef();
 
   render(): ReactNode {
     return (

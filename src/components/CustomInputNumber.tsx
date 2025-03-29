@@ -8,7 +8,7 @@ interface CustomInputNumberProps {
 }
 
 export default class CustomInputNumber extends React.Component<CustomInputNumberProps> {
-  inputRef: RefObject<HTMLInputElement> = createRef();
+  inputRef: RefObject<HTMLInputElement | null> = createRef();
 
   render(): ReactNode {
     return (

@@ -1,5 +1,4 @@
 import { BinaryImage, BinaryPixel, BinaryPixelValueEnum } from "../BinaryImage";
-import { calculateKernelRange } from "../KernelCalculator";
 
 export default class ErosionFilter {
   apply(image: BinaryImage): BinaryImage {

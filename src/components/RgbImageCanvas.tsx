@@ -1,9 +1,7 @@
 import React, { ReactNode, RefObject, createRef } from "react";
-import CustomButton from "./CustomButton";
-import { RgbImage } from "@/classes/RgbImage";
-import FileToRgbImageConverter from "@/classes/FileToRgbImageConverter";
-import RgbImageCanvasDrawer from "@/classes/RgbImageCanvasDrawer";
-import { FaUpload } from "react-icons/fa";
+import FileToRgbImageConverter from "../classes/FileToRgbImageConverter";
+import { RgbImage } from "../classes/RgbImage";
+import RgbImageCanvasDrawer from "../classes/RgbImageCanvasDrawer";
 
 interface RgbImageCanvasProps {
   text?: string;
@@ -12,8 +10,8 @@ interface RgbImageCanvasProps {
 }
 
 export default class RgbImageCanvas extends React.Component<RgbImageCanvasProps> {
-  inputRef: RefObject<HTMLInputElement> = createRef();
-  canvasRef: RefObject<HTMLCanvasElement> = createRef();
+  inputRef: RefObject<HTMLInputElement | null> = createRef();
+  canvasRef: RefObject<HTMLCanvasElement | null> = createRef();
 
   render(): ReactNode {
     return (

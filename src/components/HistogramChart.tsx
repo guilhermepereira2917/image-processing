@@ -1,5 +1,3 @@
-'use client';
-
 import { BarElement, CategoryScale, Chart, Filler, Legend, LineElement, LinearScale, PointElement, Title, Tooltip } from "chart.js";
 import { Component, ReactNode } from "react";
 import { Bar } from "react-chartjs-2";

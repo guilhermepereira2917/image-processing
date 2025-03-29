@@ -1,5 +1,4 @@
 import { BinaryImage, BinaryPixel, BinaryPixelValueEnum } from "../BinaryImage";
-import { calculateKernelRange } from "../KernelCalculator";
 
 export default class DilationFilter {
   apply(image: BinaryImage): BinaryImage {

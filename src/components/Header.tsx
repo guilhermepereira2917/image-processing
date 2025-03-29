@@ -1,4 +1,4 @@
-import { FaGithub } from "react-icons/fa";
+import { SiGithub } from "@icons-pack/react-simple-icons";
 
 export default function Header() {
   return (
@@ -7,7 +7,7 @@ export default function Header() {
 
       <div>
         <a href="https://github.com/guilhermepereira2917/image-processing" target="_blank">
-          <FaGithub className="cursor-pointer text-2xl" />
+          <SiGithub className="cursor-pointer text-2xl" />
         </a>
       </div>
     </header>

@@ -1,30 +1,30 @@
-import Link from "next/link";
-import React from "react";
+import { ReactNode } from "react";
+import { useCodeSnippet } from "./CodeSnippetContext";
 
 export interface CustomButtonProps {
   text: string;
   onClick: () => void;
-  codeSnippetClass?: any;
+  codeSnippetClass?: string;
 }
 
-interface CustomButtonState {
-  codeSnippetHidden: boolean;
-}
+export default function CustomButton({ text, onClick, codeSnippetClass }: CustomButtonProps): ReactNode {
+  const { setCodeSnippetClass } = useCodeSnippet()
 
-export default class CustomButton extends React.Component<CustomButtonProps, CustomButtonState> {
-  render() {
-    return (
-      <div className="flex w-full min-w-48">
-        <button onClick={this.props.onClick} className="bg-sky-800 p-2 rounded text-white font-bold w-full">{this.props.text}</button>
+  const handleOpenCodeSnippet = () => {
+    if (codeSnippetClass) {
+      setCodeSnippetClass(codeSnippetClass)
+    }
+  }
 
-        {this.props.codeSnippetClass && (
-          <Link href={`/?filter=${this.props.codeSnippetClass.name}`}>
-            <button className="bg-sky-800 p-2 ml-2 rounded font-bold text-white">
-              &lt;/&gt;
-            </button>
-          </Link>
-        )}
-      </div>
-    );
-  };
+  return (
+    <div className="flex w-full min-w-48">
+      <button onClick={onClick} className="bg-sky-800 p-2 rounded text-white font-bold w-full cursor-pointer">{text}</button>
+
+      {codeSnippetClass && (
+        <button onClick={handleOpenCodeSnippet} className="bg-sky-800 p-2 ml-2 rounded font-bold text-white cursor-pointer">
+          &lt;/&gt;
+        </button>
+      )}
+    </div>
+  );
 }
